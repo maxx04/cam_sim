@@ -30,6 +30,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+library xil_defaultlib;
+use xil_defaultlib.CAM_PKG.all;
+
 entity s_top is
 end s_top;
 
@@ -60,6 +63,7 @@ architecture Behavioral of s_top is
 		     px_data_out                  : out STD_LOGIC_VECTOR(23 downto 0));
 	end component;
 	
+	
 	component check_sensor is
     Port ( resetn : in STD_LOGIC;
            clk : in STD_LOGIC;
@@ -68,7 +72,8 @@ architecture Behavioral of s_top is
            pixel_data : in STD_LOGIC_VECTOR (23 downto 0);
            pixel_data_ready : in STD_LOGIC;
            sensor_data : out STD_LOGIC_VECTOR (23 downto 0);
-           sensor_data_ready : out STD_LOGIC);
+           sensor_data_ready : out STD_LOGIC;
+           pixel_out : out pixel);
 end component;
 
 	component bmp_wreiter is
@@ -114,7 +119,8 @@ begin
            pixel_data => px_data_out,
            pixel_data_ready => px_data_ready,
            sensor_data => open,
-           sensor_data_ready => open);
+           sensor_data_ready => open,
+           pixel_out => open);
 
 	output : bmp_wreiter
 			port map(
@@ -126,8 +132,8 @@ begin
 			px_data_ready => px_data_ready,
 			px_data     => px_data_out
 		);
-
-	process(clk) is
+   
+	clk_proc: process(clk) is
 	begin
 		clk <= not clk after 2 ns;
 	end process;

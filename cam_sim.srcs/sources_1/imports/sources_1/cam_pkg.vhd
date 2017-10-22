@@ -25,27 +25,29 @@ use ieee.numeric_std.all;
 package CAM_PKG is
 
 	-- packet data length (bytes)
-	constant pck_data_length  : positive := 12;
-	constant numb_sync_bytes  : positive := 5;
-	constant numb_cntrl_bytes : positive := 1;
-	constant numb_crc_bytes   : positive := 2;
-
-	constant gl_packet_length : positive := numb_sync_bytes + numb_cntrl_bytes + pck_data_length + numb_crc_bytes;
-
-	constant G_LINE_WIDTH  : integer := 48;
-	constant G_PIXEL_BYTES : integer := 2;
+	constant Image_Width  : positive := 480;
+	constant Image_Hight  : positive := 640;
+	constant bytes_per_px : positive := 3;
 
 	type RGB_COLOR is record
-		r : positive range 1 TO 1023; --(7 downto 0);
-		g : unsigned (7 downto 0);
-		b : unsigned (7 downto 0);
+		r : integer range 0 TO 255;
+		g : integer range 0 TO 255;
+		b : integer range 0 TO 255;
+	end record;
+
+	type pixel_position is record
+		x : integer range 1 TO Image_Width;
+		y : integer range 1 TO Image_Hight;
 	end record;
 
 	type pixel is record
-		x     : positive range 1 TO 1023;
-		y     : positive range 1 TO 1023;
+		pos   : pixel_position;
 		color : RGB_COLOR;
 	end record;
+
+type positions_array is array(80 downto 0) of pixel_position;
+type color_array is array(80 downto 0) of RGB_COLOR;
+
 
 	function log2(n : natural) return natural;
 

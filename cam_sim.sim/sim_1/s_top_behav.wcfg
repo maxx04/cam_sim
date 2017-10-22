@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="5139237522221fs"></ZoomStartTime>
-      <ZoomEndTime time="5139444495556fs"></ZoomEndTime>
-      <Cursor1Time time="5139410000000fs"></Cursor1Time>
+      <ZoomStartTime time="3969832583333fs"></ZoomStartTime>
+      <ZoomEndTime time="3969955483334fs"></ZoomEndTime>
+      <Cursor1Time time="3969935000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="78"></ValueColumnWidth>
+      <ValueColumnWidth column_width="70"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="20" />
    <wave_markers>
       <marker time="1976920000000" label="" />
    </wave_markers>
@@ -55,10 +55,12 @@
    <wvobject fp_name="/s_top/px_data" type="array">
       <obj_property name="ElementShortName">px_data[7:0]</obj_property>
       <obj_property name="ObjectShortName">px_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/px_data_out" type="array">
       <obj_property name="ElementShortName">px_data_out[23:0]</obj_property>
       <obj_property name="ObjectShortName">px_data_out[23:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/bearbeitung/data_ready" type="logic">
       <obj_property name="ElementShortName">data_ready</obj_property>
@@ -95,6 +97,13 @@
    <wvobject fp_name="/s_top/sensor/p" type="array">
       <obj_property name="ElementShortName">p</obj_property>
       <obj_property name="ObjectShortName">p</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/sensor/i_out" type="other">
+      <obj_property name="ElementShortName">i_out</obj_property>
+      <obj_property name="ObjectShortName">i_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/sensor/px_colors" type="array">
+      <obj_property name="ElementShortName">px_colors[80:0]</obj_property>
+      <obj_property name="ObjectShortName">px_colors[80:0]</obj_property>
    </wvobject>
 </wave_config>
