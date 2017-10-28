@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="3969832583333fs"></ZoomStartTime>
-      <ZoomEndTime time="3969955483334fs"></ZoomEndTime>
-      <Cursor1Time time="3969935000000fs"></Cursor1Time>
+      <ZoomStartTime time="191954733827533fs"></ZoomStartTime>
+      <ZoomEndTime time="191957765234494fs"></ZoomEndTime>
+      <Cursor1Time time="191956130000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="70"></ValueColumnWidth>
+      <NameColumnWidth column_width="159"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="20" />
+   <WVObjectSize size="15" />
    <wave_markers>
       <marker time="1976920000000" label="" />
    </wave_markers>
@@ -32,51 +32,18 @@
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
+   <wvobject fp_name="/s_top/pclk" type="logic">
+      <obj_property name="ElementShortName">pclk</obj_property>
+      <obj_property name="ObjectShortName">pclk</obj_property>
+   </wvobject>
    <wvobject fp_name="/s_top/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/bearbeitung/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/hsync" type="logic">
-      <obj_property name="ElementShortName">hsync</obj_property>
-      <obj_property name="ObjectShortName">hsync</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/vsync" type="logic">
-      <obj_property name="ElementShortName">vsync</obj_property>
-      <obj_property name="ObjectShortName">vsync</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/href" type="logic">
-      <obj_property name="ElementShortName">href</obj_property>
-      <obj_property name="ObjectShortName">href</obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/px_data" type="array">
       <obj_property name="ElementShortName">px_data[7:0]</obj_property>
       <obj_property name="ObjectShortName">px_data[7:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/px_data_out" type="array">
-      <obj_property name="ElementShortName">px_data_out[23:0]</obj_property>
-      <obj_property name="ObjectShortName">px_data_out[23:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/bearbeitung/data_ready" type="logic">
-      <obj_property name="ElementShortName">data_ready</obj_property>
-      <obj_property name="ObjectShortName">data_ready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/bearbeitung/bit_number" type="other">
-      <obj_property name="ElementShortName">bit_number</obj_property>
-      <obj_property name="ObjectShortName">bit_number</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/bearbeitung/px_count_out" type="other">
-      <obj_property name="ElementShortName">px_count_out</obj_property>
-      <obj_property name="ObjectShortName">px_count_out</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/bearbeitung/line_count_out" type="other">
-      <obj_property name="ElementShortName">line_count_out</obj_property>
-      <obj_property name="ObjectShortName">line_count_out</obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/output/x" type="other">
       <obj_property name="ElementShortName">x</obj_property>
@@ -86,24 +53,36 @@
       <obj_property name="ElementShortName">y</obj_property>
       <obj_property name="ObjectShortName">y</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/output/px_data_ready" type="logic">
-      <obj_property name="ElementShortName">px_data_ready</obj_property>
-      <obj_property name="ObjectShortName">px_data_ready</obj_property>
+   <wvobject fp_name="/s_top/modul/cam_to_pixel/px_data_out" type="array">
+      <obj_property name="ElementShortName">px_data_out[23:0]</obj_property>
+      <obj_property name="ObjectShortName">px_data_out[23:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/output/px_data" type="array">
-      <obj_property name="ElementShortName">px_data[23:0]</obj_property>
-      <obj_property name="ObjectShortName">px_data[23:0]</obj_property>
+   <wvobject fp_name="/s_top/modul/sensor_data" type="array">
+      <obj_property name="ElementShortName">sensor_data</obj_property>
+      <obj_property name="ObjectShortName">sensor_data</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/sensor/p" type="array">
-      <obj_property name="ElementShortName">p</obj_property>
-      <obj_property name="ObjectShortName">p</obj_property>
+   <wvobject fp_name="/s_top/modul/sensor_data_ready" type="logic">
+      <obj_property name="ElementShortName">sensor_data_ready</obj_property>
+      <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/sensor/i_out" type="other">
-      <obj_property name="ElementShortName">i_out</obj_property>
-      <obj_property name="ObjectShortName">i_out</obj_property>
+   <wvobject fp_name="/s_top/modul/sensor_1/pixel_cnt" type="other">
+      <obj_property name="ElementShortName">pixel_cnt</obj_property>
+      <obj_property name="ObjectShortName">pixel_cnt</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/sensor/px_colors" type="array">
-      <obj_property name="ElementShortName">px_colors[80:0]</obj_property>
-      <obj_property name="ObjectShortName">px_colors[80:0]</obj_property>
+   <wvobject fp_name="/s_top/modul/sensor_1/line_cnt" type="other">
+      <obj_property name="ElementShortName">line_cnt</obj_property>
+      <obj_property name="ObjectShortName">line_cnt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/pixel_data" type="array">
+      <obj_property name="ElementShortName">pixel_data[23:0]</obj_property>
+      <obj_property name="ObjectShortName">pixel_data[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/pixel_data_ready" type="logic">
+      <obj_property name="ElementShortName">pixel_data_ready</obj_property>
+      <obj_property name="ObjectShortName">pixel_data_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/output/px_data_tmp" type="array">
+      <obj_property name="ElementShortName">px_data_tmp[23:0]</obj_property>
+      <obj_property name="ObjectShortName">px_data_tmp[23:0]</obj_property>
    </wvobject>
 </wave_config>

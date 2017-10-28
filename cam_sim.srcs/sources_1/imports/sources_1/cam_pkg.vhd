@@ -45,6 +45,11 @@ package CAM_PKG is
 		color : RGB_COLOR;
 	end record;
 
+	type sensor is record
+		pos   : pixel_position;
+		color : RGB_COLOR;
+	end record;
+
 type positions_array is array(80 downto 0) of pixel_position;
 type color_array is array(80 downto 0) of RGB_COLOR;
 

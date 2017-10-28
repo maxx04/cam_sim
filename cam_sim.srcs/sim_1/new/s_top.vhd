@@ -38,51 +38,52 @@ end s_top;
 
 architecture Behavioral of s_top is
 
-	signal reset                    : std_logic := '1';
-	signal clk, clk_out             : std_logic := '0';
-	signal pclk, hsync, vsync, href : std_logic := '0';
-	signal px_data                  : std_logic_vector(7 downto 0);
-	signal px_data_ready              : std_logic := '0';
-	signal px_data_out              : std_logic_vector(23 downto 0);
-	signal x,y : integer :=0 ;
+	signal reset                                : std_logic := '1';
+	signal clk, clk_out                         : std_logic := '0';
+	signal pclk, cam_hsync, cam_vsync, cam_href : std_logic := '0';
+	signal px_data                              : std_logic_vector(7 downto 0);
+	signal data_to_wreiter_ready                    : std_logic := '0';
+	signal data_to_wreiter                          : std_logic_vector(23 downto 0);
+	signal x, y                                 : integer   := 0;
+	signal tmp_sensor	: sensor;
+	signal tmp_sensor_ready	: std_logic := '0';
+	constant pclk_to_clk_rate                   : integer   := 5;
 
 	component sim_tb_bmpread
-		port(resetn                                                          : in  std_logic;
-		     pixel_data                                                      : out std_logic_vector(7 downto 0);
-		     pixel_out_clk, pixel_out_hsync, pixel_out_vsync, pixel_out_href : out std_logic);
+		port(resetn                                           : in  std_logic;
+			pclk                                           : in  std_logic;
+		     pixel_data                                       : out std_logic_vector(7 downto 0);
+		     pixel_out_hsync, pixel_out_vsync, pixel_out_href : out std_logic);
 	end component;
 
-	component get_mark_points
-		Port(resetn                       : in  STD_LOGIC;
-		     clk                          : in  STD_LOGIC;
-		     vsync                        : in  STD_LOGIC;
-		     href                         : in  STD_LOGIC;
-		     px_data                      : in  STD_LOGIC_VECTOR(7 downto 0);
-		     data_ready                   : out STD_LOGIC;
-		     px_count_out, line_count_out : out positive;
-		     px_data_out                  : out STD_LOGIC_VECTOR(23 downto 0));
+	component cam_move is
+		Port(clk               : in  STD_LOGIC;
+		     resetn            : in  STD_LOGIC;
+		     pclk              : in  STD_LOGIC;
+		     hsync_in          : in  std_logic;
+		     vsync_in          : in  std_logic;
+		     href_in           : in  std_logic;
+		     cam_pxdata        : in  STD_LOGIC_VECTOR(7 downto 0);
+		     -----
+		     px_number         : out natural range 0 to 1024 := 0;
+		     line_number       : out natural range 0 to 1024 := 0;
+		     pixel_data       : out std_logic_vector(23 downto 0);
+	 		pixel_data_ready : out STD_LOGIC;
+		     sensor_data       : out sensor;
+		     sensor_data_ready : out STD_LOGIC 
+		    );
+
 	end component;
-	
-	
-	component check_sensor is
-    Port ( resetn : in STD_LOGIC;
-           clk : in STD_LOGIC;
-           pixel_cnt :  positive range 1 TO 1023;
-           line_cnt :  positive range 1 TO 1023;
-           pixel_data : in STD_LOGIC_VECTOR (23 downto 0);
-           pixel_data_ready : in STD_LOGIC;
-           sensor_data : out STD_LOGIC_VECTOR (23 downto 0);
-           sensor_data_ready : out STD_LOGIC;
-           pixel_out : out pixel);
-end component;
 
 	component bmp_wreiter is
-		Port(resetn      : in STD_LOGIC;
-		     px_clk      : in STD_LOGIC;
-		     start_frame : in STD_LOGIC;
-		     x,y : in positive;
-		     px_data_ready : in STD_LOGIC;
-		     px_data     : in STD_LOGIC_VECTOR(23 downto 0));
+		Port(resetn        : in STD_LOGIC;
+		     clk           : in STD_LOGIC;
+		     start_frame   : in STD_LOGIC;
+		     x, y          : in positive;
+		 pixel_data       : in std_logic_vector(23 downto 0);
+	     pixel_data_ready : in STD_LOGIC;
+	     sensor_data      : in sensor;
+	     sensor_data_ready : in STD_LOGIC);
 	end component;
 
 begin
@@ -90,53 +91,68 @@ begin
 	input : sim_tb_bmpread
 		port map(
 			resetn          => reset,
+			pclk            => pclk,
 			pixel_data      => px_data,
-			pixel_out_clk   => pclk,
-			pixel_out_hsync => open,
-			pixel_out_vsync => vsync,
-			pixel_out_href  => href
+			pixel_out_hsync => cam_hsync,
+			pixel_out_vsync => cam_vsync,
+			pixel_out_href  => cam_href
 		);
 
-	bearbeitung : get_mark_points
-			port map(
-			resetn         => reset,
-			clk            => pclk,
-			vsync          => vsync,
-			href           => href,
-			px_data        => px_data,
-			px_count_out   => x,
-			line_count_out => y,
-			data_ready     => px_data_ready,
-			px_data_out    => px_data_out
-		);
-		
-		sensor: check_sensor 
-	    port map ( 
-			resetn       => reset,
-			clk            => pclk,
-           pixel_cnt => x,
-           line_cnt => y,
-           pixel_data => px_data_out,
-           pixel_data_ready => px_data_ready,
-           sensor_data => open,
-           sensor_data_ready => open,
-           pixel_out => open);
+	modul : cam_move
+		port map(clk               => clk,
+		         resetn            => reset,
+		         pclk              => pclk,
+		         hsync_in          => cam_hsync,
+		         vsync_in          => cam_vsync,
+		         href_in           => cam_href,
+		         cam_pxdata        => px_data,
+		         ---
+		         px_number         => x,
+		         line_number       => y,
+		         pixel_data   => data_to_wreiter,
+	     		pixel_data_ready  => data_to_wreiter_ready,
+		         sensor_data       => tmp_sensor,
+		         sensor_data_ready => tmp_sensor_ready
+		        );
 
 	output : bmp_wreiter
-			port map(
-			resetn      => reset,
-			px_clk      => pclk,
-			start_frame => vsync,
-			x => x , 
-			y => y,
-			px_data_ready => px_data_ready,
-			px_data     => px_data_out
+		port map(
+			resetn        => reset,
+			clk           => clk,
+			start_frame   => cam_vsync,
+			x             => x,
+			y             => y,
+		 pixel_data   => data_to_wreiter,
+	     pixel_data_ready  => data_to_wreiter_ready,
+	     sensor_data    => tmp_sensor,
+	     sensor_data_ready => tmp_sensor_ready
 		);
-   
-	clk_proc: process(clk) is
+
+	pclk_pr : process(clk) is
+		variable n : integer := 0;
+
 	begin
-		clk <= not clk after 2 ns;
-	end process;
+		if rising_edge(clk) then
+			if reset = '0' then
+				n := 0;
+			else
+				n := n + 1;
+
+				if n > pclk_to_clk_rate then
+					pclk <= '1';
+				else
+					pclk <= '0';
+				end if;
+
+				if n = 2*pclk_to_clk_rate then
+					n := 0;
+				end if;
+
+			end if;
+		end if;
+	end process pclk_pr;
+
+	clk <= not clk after 10 ns;
 
 	reset <= '0', '1' after 20 ns;
 

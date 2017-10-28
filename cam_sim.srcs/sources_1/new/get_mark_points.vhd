@@ -103,10 +103,6 @@ begin
 				px_count_out <= px_count;
 				line_count_out <= line_count;
 				
-				if line_count > 300 and line_count < 320 then
-					px_data_out <= (others => '0');
-				end if;
-				
 
 			end if;
 		end if;

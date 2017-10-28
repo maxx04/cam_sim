@@ -31,7 +31,9 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 library xil_defaultlib;
+
 use xil_defaultlib.CAM_PKG.all;
+
 
 entity check_sensor is
 
@@ -44,9 +46,9 @@ entity check_sensor is
 	     line_cnt          : in  positive range 1 TO 1023;
 	     pixel_data        : in  STD_LOGIC_VECTOR(23 downto 0);
 	     pixel_data_ready  : in  STD_LOGIC;
-	     sensor_data       : out STD_LOGIC_VECTOR(23 downto 0);
-	     sensor_data_ready : out STD_LOGIC;
-	     pixel_out         : out pixel);
+	     ----
+	     sensor_data       : out sensor;
+	     sensor_data_ready : out STD_LOGIC);
 end check_sensor;
 
 architecture Behavioral of check_sensor is
@@ -56,10 +58,12 @@ architecture Behavioral of check_sensor is
 	signal px_colors : color_array;
 	signal i_out     : integer range 0 to positions_array'length - 1;
 
+
 begin
 
 	check_input : process(clk) is
 		variable i : integer range 0 to positions_array'length - 1;
+	variable old_pixel_cnt :   positive range 1 TO 1023;
 
 	begin
 		if rising_edge(clk) then        -- aktuell kommt 3 mal rein
@@ -67,7 +71,11 @@ begin
 				sensor_data_ready <= '0';
 			else
 
-				if pixel_data_ready = '1' then
+				if (pixel_data_ready = '1' and pixel_cnt /= old_pixel_cnt) then
+					
+					sensor_data_ready <= '0';
+					
+					old_pixel_cnt := pixel_cnt; -- nur einen wert von pixel uebernehmen
 
 					if (line_cnt >= sensor_position.y - sensor_radius and line_cnt < sensor_position.y + sensor_radius ) then
 
@@ -79,8 +87,9 @@ begin
 							px_colors(i).g <= to_integer(unsigned(pixel_data(15 downto 8)));
 							px_colors(i).b <= to_integer(unsigned(pixel_data(23 downto 16)));
 							
-							sensor_data( 7 downto 0) <= pixel_data(7 downto 0); -- FIXME
-
+							sensor_data.color <= (250, 0, 0);
+							sensor_data_ready <= '1';
+							
 							i_out <= i; --TODO
 
 						end if;
@@ -90,9 +99,6 @@ begin
 
 			end if;
 		end if;
-		
-		
-		
 		
 	end process check_input;
 

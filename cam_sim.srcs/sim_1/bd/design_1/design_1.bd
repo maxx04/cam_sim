@@ -30,7 +30,12 @@
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters/>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>FREQ_HZ</spirit:name>
+            <spirit:value>200000000</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
       </spirit:busInterface>
       <spirit:busInterface>
         <spirit:name>RST.RESETN_0</spirit:name>
@@ -50,6 +55,30 @@
           </spirit:portMap>
         </spirit:portMaps>
         <spirit:parameters/>
+      </spirit:busInterface>
+      <spirit:busInterface>
+        <spirit:name>CLK.CLK_20MHZ</spirit:name>
+        <spirit:displayName>Clk</spirit:displayName>
+        <spirit:description>Clock</spirit:description>
+        <spirit:busType spirit:library="signal" spirit:name="clock" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:abstractionType spirit:library="signal" spirit:name="clock_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:slave/>
+        <spirit:portMaps>
+          <spirit:portMap>
+            <spirit:logicalPort>
+              <spirit:name>CLK</spirit:name>
+            </spirit:logicalPort>
+            <spirit:physicalPort>
+              <spirit:name>clk_20MHZ</spirit:name>
+            </spirit:physicalPort>
+          </spirit:portMap>
+        </spirit:portMaps>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>FREQ_HZ</spirit:name>
+            <spirit:value>20000000</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
       </spirit:busInterface>
     </spirit:busInterfaces>
     <spirit:model>
@@ -102,13 +131,9 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>data_to_usb_0</spirit:name>
+          <spirit:name>clk_20MHZ</spirit:name>
           <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-            <spirit:vector>
-              <spirit:left>7</spirit:left>
-              <spirit:right>0</spirit:right>
-            </spirit:vector>
+            <spirit:direction>in</spirit:direction>
           </spirit:wire>
         </spirit:port>
       </spirit:ports>
@@ -165,9 +190,9 @@
         <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="hsync_in"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
-        <spirit:name>cam_move_0_data_to_usb</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="data_to_usb"/>
-        <spirit:externalPortReference spirit:portRef="data_to_usb_0"/>
+        <spirit:name>clk_200MHZ_1</spirit:name>
+        <spirit:externalPortReference spirit:portRef="clk_20MHZ"/>
+        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="pclk"/>
       </spirit:adHocConnection>
     </spirit:adHocConnections>
   </spirit:design>

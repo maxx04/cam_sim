@@ -29,10 +29,12 @@ use work.sim_bmppack.all;
 entity sim_tb_bmpread is
 
 port(
-        signal resetn : in std_logic;
+        resetn : in std_logic;
+        pclk : in std_logic;
+        
  		pixel_data : out std_logic_vector(7 downto 0 ); 
 
- 		pixel_out_clk, pixel_out_hsync, pixel_out_vsync, pixel_out_href : out std_logic );
+ 		 pixel_out_hsync, pixel_out_vsync, pixel_out_href : out std_logic );
 
 end sim_tb_bmpread;
 
@@ -71,14 +73,6 @@ begin
             report " byte_per_pixel to big "
             severity failure;
 
-  process(clk) is
-  begin
-    clk <= not clk after 5 ns;
-  end process;
-  
-
---    resetn <= '0', '1' after 20 ns;
- 
 
 
 read_file:  process
@@ -97,7 +91,7 @@ read_file:  process
     
       loop EXIT WHEN line_count = (ImageHeight + VSYNC_for + VSYNC_Width + VSYNC_after); 
   
-			wait until clk'event and clk = '0';		-- bei negative flanke			
+			wait until pclk'event and clk = '0';		-- bei negative flanke			
 			temp_pixel_clock <= '0';
 				
 		  -- HSYNC
@@ -151,7 +145,7 @@ read_file:  process
             end if;
 
 				
-			wait until  clk'event and clk = '1'; -- bei positive flanke
+			wait until  pclk'event and pclk = '1'; -- bei positive flanke
 			
 			temp_pixel_clock <= '1';	
 			
@@ -182,18 +176,16 @@ read_file:  process
     end process read_file;
 	 
 	 
-	 clk_domain_latch : process(clk, resetn)
+	 clk_domain_latch : process(pclk, resetn)
 	 begin
 	 
-	 pixel_out_clk <= clk;
-	 
+ 
 	 if resetn = '0' then
 		pixel_out_hsync <= '0' ;
 		pixel_out_vsync <= '1' ;
-		pixel_out_clk <= '0' ;
 		pixel_out_href <= '0';		
 		pixel_data <= (others => '0');
-	 elsif falling_edge(clk) then
+	 elsif falling_edge(pclk) then
 --		pixel_out_clk <= temp_pixel_clock ;
 	    pixel_out_href <= temp_href;
 		pixel_out_hsync <= temp_hsync ;
