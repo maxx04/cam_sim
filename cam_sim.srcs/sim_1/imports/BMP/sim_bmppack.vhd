@@ -57,6 +57,8 @@ package sim_bmppack is
 
   procedure GetPixel (x : in integer; y : in integer; signal data : out std_logic_vector(23 downto 0));
   procedure SetPixel (x : in integer; y : in integer; signal data : in std_logic_vector(23 downto 0));
+  	
+  procedure DrawCross (x : in integer; y : in integer; signal data : in std_logic_vector(23 downto 0));
   
 end package sim_bmppack;
 
@@ -163,8 +165,17 @@ package body sim_bmppack is
       memory_out(x*3+1+y*(GetWidth(header)*3)) := data(15 downto 8);
       memory_out(x*3+2+y*(GetWidth(header)*3)) := data(7 downto 0);
     end if;
-  end SetPixel;
+end SetPixel;
 
+procedure DrawCross (x : in integer; y : in integer; signal data : in std_logic_vector(23 downto 0)) is
+	constant CrossSize : integer := 5;
+begin
+	for n in -CrossSize to CrossSize loop
+		SetPixel(x+n,y,data);
+		SetPixel(x,y+n,data);
+	end loop;
+
+end DrawCross;
 
 
   -----------------------------------------------------------------------------

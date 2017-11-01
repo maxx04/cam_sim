@@ -34,10 +34,9 @@ library xil_defaultlib;
 
 use xil_defaultlib.CAM_PKG.all;
 
-
 entity check_sensor is
 
-	generic(sensor_position : pixel_position            := (130, 200);
+	generic(sensor_position : pixel_position            := (130, 50);
 	        sensor_radius   : integer range 16 downto 4 := 8);
 
 	Port(resetn            : in  STD_LOGIC;
@@ -53,44 +52,75 @@ end check_sensor;
 
 architecture Behavioral of check_sensor is
 
-	signal p, my_px  : pixel;
-	--	signal form_delta : positions_array;
+	signal p, p_sum  : pixel;
 	signal px_colors : color_array;
 	signal i_out     : integer range 0 to positions_array'length - 1;
 
+	signal new_value : std_logic := '0';
 
 begin
 
 	check_input : process(clk) is
-		variable i : integer range 0 to positions_array'length - 1;
-	variable old_pixel_cnt :   positive range 1 TO 1023;
+		variable i             : integer range 0 to 4*sensor_radius - 1 := 0;
+		variable sighn         : integer range -1 to 1                  := -1;
+		variable  index      : integer range 31 downto 0              := 0;
+		variable old_pixel_cnt : positive range 1 TO 1024;
+		variable shifts        : shift_position                         := (0, 2, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 4, 2, 0);
 
 	begin
-		if rising_edge(clk) then        -- aktuell kommt 3 mal rein
+		if (clk'event and clk = '0') then
+
 			if resetn = '0' then
-				sensor_data_ready <= '0';
+				new_value <= '0';
+				i         := 0;
+				sighn     := 1;
+				index     := 0;
 			else
 
+				new_value <= '0';       -- neuen wert nur ein mal bei clk kommt
+
 				if (pixel_data_ready = '1' and pixel_cnt /= old_pixel_cnt) then
-					
-					sensor_data_ready <= '0';
-					
+
 					old_pixel_cnt := pixel_cnt; -- nur einen wert von pixel uebernehmen
 
+					-- wenn innerhalb sensor
 					if (line_cnt >= sensor_position.y - sensor_radius and line_cnt < sensor_position.y + sensor_radius ) then
 
-						if (pixel_cnt = sensor_position.x - 1) then --FIXME Vereinheitlichen Pixel faengt von 1 und nicht von 0
+						if (line_cnt = sensor_position.y - sensor_radius and pixel_cnt = sensor_position.x - 1) then
+							sighn := 1;
+							index := 0;
+							i     := 0;
+						end if;
 
-							i := 2*sensor_radius - (sensor_position.y + sensor_radius - line_cnt);
+						-- und pixelreihenfolge von links nach rechts
+						if (pixel_cnt = sensor_position.x - 1 + sighn*shifts(i)) then --FIXME Vereinheitlichen Pixel faengt von 1 und nicht von 0
+							-- index wird von oben nach unten berechnet
 
-							px_colors(i).r <= to_integer(unsigned(pixel_data(7 downto 0)));
-							px_colors(i).g <= to_integer(unsigned(pixel_data(15 downto 8)));
-							px_colors(i).b <= to_integer(unsigned(pixel_data(23 downto 16)));
+							px_colors(index).r <= to_integer(unsigned(pixel_data(7 downto 0)));
+							px_colors(index).g <= to_integer(unsigned(pixel_data(15 downto 8)));
+							px_colors(index).b <= to_integer(unsigned(pixel_data(23 downto 16)));
+
+							p.pos.x <= pixel_cnt;
+							p.pos.y <= line_cnt;
+
+							new_value <= '1';
+
+							if sighn = 1 then -- erstes sighn = -1
+								index := 31 - i;
+								i  := i + 1; -- fuer naechste runde
+
+
+
+							else
+								index := i;
+							end if;
+
+							sighn := -sighn; -- richtung wechsel
 							
-							sensor_data.color <= (250, 0, 0);
-							sensor_data_ready <= '1';
-							
-							i_out <= i; --TODO
+								if i = 15 then
+									i := 0;
+									index := 0;
+								end if;
 
 						end if;
 
@@ -98,8 +128,11 @@ begin
 				end if;
 
 			end if;
+
 		end if;
-		
+
+		i_out <= i;                     --TODO
+
 	end process check_input;
 
 end Behavioral;

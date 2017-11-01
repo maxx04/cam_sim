@@ -51,7 +51,9 @@ package CAM_PKG is
 	end record;
 
 type positions_array is array(80 downto 0) of pixel_position;
-type color_array is array(80 downto 0) of RGB_COLOR;
+type color_array is array(31 downto 0) of RGB_COLOR;
+
+type shift_position is array (15 downto 0) of integer range 0 to 8; --- FIXME größe 3 bit
 
 
 	function log2(n : natural) return natural;

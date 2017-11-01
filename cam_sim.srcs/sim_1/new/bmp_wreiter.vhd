@@ -58,19 +58,15 @@ begin
 			if (x /= x_old) then
 				x_old <= x;
 
-				if (pixel_data_ready = '1') then
-
+				if (pixel_data_ready = '1') then -- selber bild abbilden
 					SetPixel(x, y, pixel_data);
-
 				end if;
 
-				if (sensor_data_ready = '1' ) then
-
-					SetPixel(x, y, px_data_tmp);
-
+				if (sensor_data_ready = '1' ) then -- sensor abbilden
+					DrawCross(sensor_data.pos.x, sensor_data.pos.y, px_data_tmp);
 				end if;
 
-				if (y = 640) then       -- ende schreiben, dann
+				if (y = 640) then       -- FIXME ende schreiben, dann 
 
 					if file_writed = '0' then
 
@@ -88,6 +84,8 @@ begin
 				end if;
 			end if;
 
+		else
+			px_data_tmp(7 downto 0) <= (others => '1');
 		end if;
 
 	end process writer;

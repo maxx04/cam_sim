@@ -74,6 +74,7 @@ architecture Behavioral of s_top is
 		    );
 
 	end component;
+	
 
 	component bmp_wreiter is
 		Port(resetn        : in STD_LOGIC;
