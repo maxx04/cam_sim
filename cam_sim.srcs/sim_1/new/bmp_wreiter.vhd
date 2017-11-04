@@ -21,6 +21,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.NUMERIC_STD.ALL;
+use ieee.std_logic_arith.all;
+--use IEEE.std_logic_unsigned.all;
 
 use work.sim_bmppack.all;
 
@@ -42,14 +44,18 @@ end bmp_wreiter;
 
 architecture Behavioral of bmp_wreiter is
 
-	signal px_data_tmp                    : std_logic_vector(23 downto 0) := (others => '0');
+
 	signal file_writed                    : std_logic                     := '0';
 	signal ImageWidth, ImageHeight, x_old : natural                       := 0;
 	signal tmp_sensor                     : sensor;
+	signal px_data_tmp                    : std_logic_vector(23 downto 0) := (others => '0');
 
 begin
 
 	writer : process is
+	
+
+	
 	begin
 		wait until rising_edge(clk);
 
@@ -63,10 +69,16 @@ begin
 				end if;
 
 				if (sensor_data_ready = '1' ) then -- sensor abbilden
-					DrawCross(sensor_data.pos.x, sensor_data.pos.y, px_data_tmp);
+					px_data_tmp (7 downto 0) <= conv_std_logic_vector(sensor_data.color.r, 8);
+					px_data_tmp (15 downto 8) <= conv_std_logic_vector(sensor_data.color.g, 8);
+					px_data_tmp (23 downto 16) <= conv_std_logic_vector(sensor_data.color.b, 8);
+					
+	               tmp_sensor <= sensor_data;
 				end if;
 
 				if (y = 640) then       -- FIXME ende schreiben, dann 
+					
+					DrawCross(tmp_sensor.pos.x, tmp_sensor.pos.y, px_data_tmp);
 
 					if file_writed = '0' then
 
@@ -79,13 +91,12 @@ begin
 
 					end if;
 
-					wait until false;
+					wait;
 
 				end if;
 			end if;
 
-		else
-			px_data_tmp(7 downto 0) <= (others => '1');
+		
 		end if;
 
 	end process writer;

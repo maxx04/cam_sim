@@ -170,6 +170,7 @@ end SetPixel;
 procedure DrawCross (x : in integer; y : in integer; signal data : in std_logic_vector(23 downto 0)) is
 	constant CrossSize : integer := 5;
 begin
+	
 	for n in -CrossSize to CrossSize loop
 		SetPixel(x+n,y,data);
 		SetPixel(x,y+n,data);
