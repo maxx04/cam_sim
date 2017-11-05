@@ -47,19 +47,23 @@ package CAM_PKG is
 		color : RGB_COLOR;
 	end record;
 
+
 	type sensor is record
 		pos   : pixel_position;
 		color : RGB_COLOR;
+		max_pos : integer range 0 to 31;
+		min_pos :  integer range 0 to 31;
 	end record;
 	
 
 	type positions_array is array (31 downto 0) of pixel_position;
 	type color_array is array (31 downto 0) of RGB_COLOR;
-
+	
 	type shift_position is array (16 downto 0) of integer range 0 to 8; --- FIXME größe 3 bit
 
 	function log2(n : natural) return natural;
 	function middle_value(v1 : in RGB_COLOR; v2 : in RGB_COLOR) return RGB_COLOR;
+	function color_distance(Pixel0 : in RGB_COLOR; Pixel1 : in RGB_COLOR) return integer;
 
 end package CAM_PKG;
 
@@ -85,6 +89,10 @@ package body CAM_PKG is
 		return r;
 	end function middle_value;
 
+	function color_distance(Pixel0 : in RGB_COLOR; Pixel1 : in RGB_COLOR) return integer is
+	begin
+		return (((Pixel0.r + Pixel0.g + Pixel0.b) - (Pixel1.r + Pixel1.g + Pixel1.b)));
+	end function color_distance;
 	-----------------------------------------------------------------------------
 
 end package body CAM_PKG;

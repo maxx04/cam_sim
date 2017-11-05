@@ -53,7 +53,7 @@ architecture Behavioral of bmp_wreiter is
 begin
 
 	writer : process is
-	
+
 
 	
 	begin

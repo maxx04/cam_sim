@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="12941250002fs"></ZoomEndTime>
-      <Cursor1Time time="0fs"></Cursor1Time>
+      <ZoomStartTime time="42560043750000fs"></ZoomStartTime>
+      <ZoomEndTime time="42560531250001fs"></ZoomEndTime>
+      <Cursor1Time time="42560450000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="155"></NameColumnWidth>
-      <ValueColumnWidth column_width="77"></ValueColumnWidth>
+      <ValueColumnWidth column_width="73"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="22" />
+   <WVObjectSize size="15" />
    <wave_markers>
       <marker time="1976920000000" label="" />
    </wave_markers>
@@ -60,18 +60,11 @@
    <wvobject fp_name="/s_top/modul/sensor_data" type="array">
       <obj_property name="ElementShortName">sensor_data</obj_property>
       <obj_property name="ObjectShortName">sensor_data</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/modul/sensor_data_ready" type="logic">
       <obj_property name="ElementShortName">sensor_data_ready</obj_property>
       <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/modul/sensor_1/pixel_cnt" type="other">
-      <obj_property name="ElementShortName">pixel_cnt</obj_property>
-      <obj_property name="ObjectShortName">pixel_cnt</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/modul/sensor_1/line_cnt" type="other">
-      <obj_property name="ElementShortName">line_cnt</obj_property>
-      <obj_property name="ObjectShortName">line_cnt</obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/modul/pixel_data" type="array">
       <obj_property name="ElementShortName">pixel_data[23:0]</obj_property>
@@ -85,22 +78,6 @@
       <obj_property name="ElementShortName">px_data_tmp[23:0]</obj_property>
       <obj_property name="ObjectShortName">px_data_tmp[23:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/modul/sensor_1/i_out" type="other">
-      <obj_property name="ElementShortName">i_out</obj_property>
-      <obj_property name="ObjectShortName">i_out</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/modul/sensor_1/new_value" type="logic">
-      <obj_property name="ElementShortName">new_value</obj_property>
-      <obj_property name="ObjectShortName">new_value</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/modul/sensor_1/p" type="array">
-      <obj_property name="ElementShortName">p</obj_property>
-      <obj_property name="ObjectShortName">p</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/modul/sensor_1/p_sum" type="array">
-      <obj_property name="ElementShortName">p_sum</obj_property>
-      <obj_property name="ObjectShortName">p_sum</obj_property>
-   </wvobject>
    <wvobject fp_name="/s_top/output/sensor_data" type="array">
       <obj_property name="ElementShortName">sensor_data</obj_property>
       <obj_property name="ObjectShortName">sensor_data</obj_property>
@@ -108,10 +85,5 @@
    <wvobject fp_name="/s_top/output/sensor_data_ready" type="logic">
       <obj_property name="ElementShortName">sensor_data_ready</obj_property>
       <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/modul/sensor_1/px_colors" type="array">
-      <obj_property name="ElementShortName">px_colors[31:0]</obj_property>
-      <obj_property name="ObjectShortName">px_colors[31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
 </wave_config>

@@ -44,8 +44,8 @@ entity cam_move is
 	     -----
 	     px_number         : out natural range 0 to 1024 := 0;
 	     line_number       : out natural range 0 to 1024 := 0;
-	     pixel_data       : out std_logic_vector(23 downto 0);
-	     pixel_data_ready : out STD_LOGIC;
+	     pixel_data        : out std_logic_vector(23 downto 0);
+	     pixel_data_ready  : out STD_LOGIC;
 	     sensor_data       : out sensor;
 	     sensor_data_ready : out STD_LOGIC
 	    );
@@ -54,8 +54,8 @@ end cam_move;
 architecture Behavioral of cam_move is
 
 	signal tmp_pixel_data_ready : std_logic               := '0';
-	signal tmp_pixel_data    : std_logic_vector(23 downto 0);
-	signal x, y          : integer range 0 to 1024 := 0;
+	signal tmp_pixel_data       : std_logic_vector(23 downto 0);
+	signal x, y                 : integer range 0 to 1024 := 0;
 
 	component get_mark_points
 		Port(resetn                       : in  STD_LOGIC;
@@ -69,6 +69,8 @@ architecture Behavioral of cam_move is
 	end component;
 
 	component check_sensor is
+	generic(sensor_position : pixel_position            := (130, 50);
+	        sensor_radius   : integer range 16 downto 4 := 8);
 		Port(resetn            : in  STD_LOGIC;
 		     clk               : in  STD_LOGIC;
 		     pixel_cnt         :     positive range 1 TO 1023;
@@ -82,9 +84,9 @@ architecture Behavioral of cam_move is
 begin
 
 	---- Ausgabe für wreiter
-	px_number         <= x;
-	line_number       <= y;
-	pixel_data <= tmp_pixel_data;
+	px_number        <= x;
+	line_number      <= y;
+	pixel_data       <= tmp_pixel_data;
 	pixel_data_ready <= tmp_pixel_data_ready;
 
 	cam_to_pixel : get_mark_points
@@ -100,16 +102,23 @@ begin
 			px_data_out    => tmp_pixel_data
 		);
 
-	sensor_1 : check_sensor
-		port map(
-			resetn            => resetn,
-			clk               => clk,
-			pixel_cnt         => x,
-			line_cnt          => y,
-			pixel_data        => tmp_pixel_data,
-			pixel_data_ready  => tmp_pixel_data_ready,
-			sensor_data       => sensor_data,
-			sensor_data_ready => sensor_data_ready
-		);
+	generate_sensors : for i in 1 to 5 generate
+
+	begin
+
+		sensor_1 : check_sensor
+			generic map(sensor_position => (i*20, 50))
+			port map(
+				resetn            => resetn,
+				clk               => clk,
+				pixel_cnt         => x,
+				line_cnt          => y,
+				pixel_data        => tmp_pixel_data,
+				pixel_data_ready  => tmp_pixel_data_ready,
+				sensor_data       => open, -- FIXME
+				sensor_data_ready => open
+			);
+
+	end generate generate_sensors;
 
 end Behavioral;
