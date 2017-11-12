@@ -31,7 +31,6 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 library xil_defaultlib;
-
 use xil_defaultlib.CAM_PKG.all;
 
 entity check_sensor is
@@ -144,29 +143,30 @@ begin
 	end process fill_points;
 
 	calc_sensor : process(clk) is
-		procedure calc_s(in_colors : in color_array; signal sensor_out : out sensor) is
-			variable values : diff_array;
-		begin
-
-			for i in 0 to 30 loop
-				values(i) := color_distance(in_colors(i), in_colors(i + 1));
-			end loop;
-			values(31) := color_distance(in_colors(31), in_colors(0));
-
-		end procedure calc_s;
+--		procedure calc_s(in_colors : in color_array; signal sensor_out : out sensor) is
+--			variable values : diff_array;
+--		begin
+--
+--			for i in 0 to 30 loop
+--				values(i) := color_distance(in_colors(i), in_colors(i + 1));
+--			end loop;
+--			values(31) := color_distance(in_colors(31), in_colors(0));
+--
+--		end procedure calc_s;
 
 		variable values_1         : diff_array;
 		variable max_value        : integer range -255 to 255 := 0;
-		variable min_value        : integer range -255 to 255 := 0;
+		variable min_value        : integer range -255 to 255 := 0; 
 		variable max_pos : integer range 0 to 31     := 0;
 		variable min_pos : integer range 0 to 31     := 0;
 
 	begin
 		if (clk'event and clk = '1') then
 			if resetn = '0' then
-				sensor_data_ready <= '0'; -- TODO rest initialisieren
+--				sensor_data_ready <= '0'; -- TODO rest initialisieren
 			else
 				sensor_data_ready <= '0';
+				--sensor_data <= (others => 'Z');
 				if all_points_ready = '1' then
 					--					calc_s(px_colors, sensor_data);		
 
@@ -201,5 +201,7 @@ begin
 			end if;
 		end if;
 	end process calc_sensor;
+	
+
 
 end Behavioral;

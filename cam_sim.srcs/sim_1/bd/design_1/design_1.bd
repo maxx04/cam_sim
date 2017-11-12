@@ -35,6 +35,10 @@
             <spirit:name>FREQ_HZ</spirit:name>
             <spirit:value>200000000</spirit:value>
           </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>ASSOCIATED_RESET</spirit:name>
+            <spirit:value>resetn_0</spirit:value>
+          </spirit:parameter>
         </spirit:parameters>
       </spirit:busInterface>
       <spirit:busInterface>
@@ -57,7 +61,7 @@
         <spirit:parameters/>
       </spirit:busInterface>
       <spirit:busInterface>
-        <spirit:name>CLK.CLK_20MHZ</spirit:name>
+        <spirit:name>CLK.CAM_CLK_0</spirit:name>
         <spirit:displayName>Clk</spirit:displayName>
         <spirit:description>Clock</spirit:description>
         <spirit:busType spirit:library="signal" spirit:name="clock" spirit:vendor="xilinx.com" spirit:version="1.0"/>
@@ -69,16 +73,11 @@
               <spirit:name>CLK</spirit:name>
             </spirit:logicalPort>
             <spirit:physicalPort>
-              <spirit:name>clk_20MHZ</spirit:name>
+              <spirit:name>cam_clk_0</spirit:name>
             </spirit:physicalPort>
           </spirit:portMap>
         </spirit:portMaps>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>FREQ_HZ</spirit:name>
-            <spirit:value>20000000</spirit:value>
-          </spirit:parameter>
-        </spirit:parameters>
+        <spirit:parameters/>
       </spirit:busInterface>
     </spirit:busInterfaces>
     <spirit:model>
@@ -131,9 +130,49 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>clk_20MHZ</spirit:name>
+          <spirit:name>px_number_0</spirit:name>
           <spirit:wire>
-            <spirit:direction>in</spirit:direction>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>line_number_0</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>pixel_data_0</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+            <spirit:vector>
+              <spirit:left>23</spirit:left>
+              <spirit:right>0</spirit:right>
+            </spirit:vector>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>pixel_data_ready_0</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>sensor_data_0</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>sensor_data_ready_0</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
+          </spirit:wire>
+        </spirit:port>
+        <spirit:port>
+          <spirit:name>cam_clk_0</spirit:name>
+          <spirit:wire>
+            <spirit:direction>out</spirit:direction>
           </spirit:wire>
         </spirit:port>
       </spirit:ports>
@@ -190,9 +229,39 @@
         <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="hsync_in"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
-        <spirit:name>clk_200MHZ_1</spirit:name>
-        <spirit:externalPortReference spirit:portRef="clk_20MHZ"/>
-        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="pclk"/>
+        <spirit:name>cam_move_0_px_number</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="px_number"/>
+        <spirit:externalPortReference spirit:portRef="px_number_0"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>cam_move_0_line_number</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="line_number"/>
+        <spirit:externalPortReference spirit:portRef="line_number_0"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>cam_move_0_pixel_data</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="pixel_data"/>
+        <spirit:externalPortReference spirit:portRef="pixel_data_0"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>cam_move_0_pixel_data_ready</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="pixel_data_ready"/>
+        <spirit:externalPortReference spirit:portRef="pixel_data_ready_0"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>cam_move_0_sensor_data</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="sensor_data"/>
+        <spirit:externalPortReference spirit:portRef="sensor_data_0"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>cam_move_0_sensor_data_ready</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="sensor_data_ready"/>
+        <spirit:externalPortReference spirit:portRef="sensor_data_ready_0"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>cam_move_0_cam_clk</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="cam_clk"/>
+        <spirit:externalPortReference spirit:portRef="cam_clk_0"/>
       </spirit:adHocConnection>
     </spirit:adHocConnections>
   </spirit:design>

@@ -38,7 +38,7 @@ entity bmp_wreiter is
 	     x, y              : in natural;
 	     pixel_data        : in std_logic_vector(23 downto 0);
 	     pixel_data_ready  : in STD_LOGIC;
-	     sensor_data       : in sensor;
+	     sensor_data       : in sensor_vector;
 	     sensor_data_ready : in STD_LOGIC);
 end bmp_wreiter;
 
@@ -47,13 +47,14 @@ architecture Behavioral of bmp_wreiter is
 
 	signal file_writed                    : std_logic                     := '0';
 	signal ImageWidth, ImageHeight, x_old : natural                       := 0;
-	signal tmp_sensor                     : sensor;
 	signal px_data_tmp                    : std_logic_vector(23 downto 0) := (others => '0');
 
 begin
 
 	writer : process is
 
+	variable tmp_sensor_vec : sensor_vector;
+	variable  tmp_sensor                     : sensor;
 
 	
 	begin
@@ -69,11 +70,13 @@ begin
 				end if;
 
 				if (sensor_data_ready = '1' ) then -- sensor abbilden
-					px_data_tmp (7 downto 0) <= conv_std_logic_vector(sensor_data.color.r, 8);
-					px_data_tmp (15 downto 8) <= conv_std_logic_vector(sensor_data.color.g, 8);
-					px_data_tmp (23 downto 16) <= conv_std_logic_vector(sensor_data.color.b, 8);
 					
-	               tmp_sensor <= sensor_data;
+					tmp_sensor := vector2sensor(sensor_data);
+					
+					px_data_tmp (7 downto 0) <= conv_std_logic_vector(tmp_sensor.color.r, 8);
+					px_data_tmp (15 downto 8) <= conv_std_logic_vector(tmp_sensor.color.g, 8);
+					px_data_tmp (23 downto 16) <= conv_std_logic_vector(tmp_sensor.color.b, 8);
+					
 				end if;
 
 				if (y = 640) then       -- FIXME ende schreiben, dann 

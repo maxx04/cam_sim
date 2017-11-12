@@ -2,22 +2,34 @@
    ExpandedHierarchyInLayout: "",
    guistr: "# # String gsaved with Nlview 6.6.11  2017-06-12 bk=1.3860 VDI=40 GEI=35 GUI=JA:1.6
 #  -string -flagsOSRD
-preplace port vsync_in_0 -pg 1 -y 120 -defaultsOSRD
-preplace port resetn_0 -pg 1 -y 60 -defaultsOSRD
-preplace port clk_0 -pg 1 -y 40 -defaultsOSRD
-preplace port clk_20MHZ -pg 1 -y 80 -defaultsOSRD
-preplace port hsync_in_0 -pg 1 -y 100 -defaultsOSRD
-preplace port href_in_0 -pg 1 -y 140 -defaultsOSRD
-preplace portBus cam_pxdata_0 -pg 1 -y 160 -defaultsOSRD
+preplace port vsync_in_0 -pg 1 -y 110 -defaultsOSRD
+preplace port sensor_data_ready_0 -pg 1 -y 160 -defaultsOSRD
+preplace port pixel_data_ready_0 -pg 1 -y 120 -defaultsOSRD
+preplace port px_number_0 -pg 1 -y 60 -defaultsOSRD
+preplace port resetn_0 -pg 1 -y 70 -defaultsOSRD
+preplace port clk_0 -pg 1 -y 50 -defaultsOSRD
+preplace port hsync_in_0 -pg 1 -y 90 -defaultsOSRD
+preplace port href_in_0 -pg 1 -y 130 -defaultsOSRD
+preplace port sensor_data_0 -pg 1 -y 140 -defaultsOSRD
+preplace port cam_clk_0 -pg 1 -y 40 -defaultsOSRD
+preplace port line_number_0 -pg 1 -y 80 -defaultsOSRD
+preplace portBus cam_pxdata_0 -pg 1 -y 150 -defaultsOSRD
+preplace portBus pixel_data_0 -pg 1 -y 100 -defaultsOSRD
 preplace inst cam_move_0 -pg 1 -lvl 1 -y 100 -defaultsOSRD
+preplace netloc cam_move_0_pixel_data 1 1 1 N
 preplace netloc hsync_in_0_1 1 0 1 NJ
 preplace netloc vsync_in_0_1 1 0 1 NJ
 preplace netloc href_in_0_1 1 0 1 NJ
 preplace netloc clk_0_1 1 0 1 NJ
 preplace netloc cam_pxdata_0_1 1 0 1 NJ
 preplace netloc resetn_0_1 1 0 1 NJ
-preplace netloc clk_200MHZ_1 1 0 1 N
-levelinfo -pg 1 0 210 400 -top -10 -bot 210
+preplace netloc cam_move_0_line_number 1 1 1 N
+preplace netloc cam_move_0_px_number 1 1 1 N
+preplace netloc cam_move_0_cam_clk 1 1 1 N
+preplace netloc cam_move_0_sensor_data_ready 1 1 1 N
+preplace netloc cam_move_0_sensor_data 1 1 1 N
+preplace netloc cam_move_0_pixel_data_ready 1 1 1 N
+levelinfo -pg 1 -10 210 410 -top -20 -bot 220
 ",
 }
 0

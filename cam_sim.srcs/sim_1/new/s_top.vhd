@@ -36,23 +36,21 @@ use xil_defaultlib.CAM_PKG.all;
 entity s_top is
 end s_top;
 
-
 architecture Behavioral of s_top is
 
 	signal reset                                : std_logic := '1';
 	signal clk, clk_out                         : std_logic := '0';
 	signal pclk, cam_hsync, cam_vsync, cam_href : std_logic := '0';
 	signal px_data                              : std_logic_vector(7 downto 0);
-	signal data_to_wreiter_ready                    : std_logic := '0';
-	signal data_to_wreiter                          : std_logic_vector(23 downto 0);
+	signal data_to_wreiter_ready                : std_logic := '0';
+	signal data_to_wreiter                      : std_logic_vector(23 downto 0);
 	signal x, y                                 : integer   := 0;
-	signal tmp_sensor	: sensor;
-	signal tmp_sensor_ready	: std_logic := '0';
-	constant pclk_to_clk_rate                   : integer   := 5;
+	signal tmp_sensor                           : sensor_vector;
+	signal tmp_sensor_ready                     : std_logic := '0';
 
 	component sim_tb_bmpread
 		port(resetn                                           : in  std_logic;
-			pclk                                           : in  std_logic;
+		     pclk                                             : in  std_logic;
 		     pixel_data                                       : out std_logic_vector(7 downto 0);
 		     pixel_out_hsync, pixel_out_vsync, pixel_out_href : out std_logic);
 	end component;
@@ -60,32 +58,32 @@ architecture Behavioral of s_top is
 	component cam_move is
 		Port(clk               : in  STD_LOGIC;
 		     resetn            : in  STD_LOGIC;
-		     pclk              : in  STD_LOGIC;
+		     
 		     hsync_in          : in  std_logic;
 		     vsync_in          : in  std_logic;
 		     href_in           : in  std_logic;
 		     cam_pxdata        : in  STD_LOGIC_VECTOR(7 downto 0);
 		     -----
+		     cam_clk           : out STD_LOGIC;
 		     px_number         : out natural range 0 to 1024 := 0;
 		     line_number       : out natural range 0 to 1024 := 0;
-		     pixel_data       : out std_logic_vector(23 downto 0);
-	 		pixel_data_ready : out STD_LOGIC;
-		     sensor_data       : out sensor;
-		     sensor_data_ready : out STD_LOGIC 
+		     pixel_data        : out std_logic_vector(23 downto 0);
+		     pixel_data_ready  : out STD_LOGIC;
+		     sensor_data       : out sensor_vector;
+		     sensor_data_ready : out STD_LOGIC
 		    );
 
 	end component;
-	
 
 	component bmp_wreiter is
-		Port(resetn        : in STD_LOGIC;
-		     clk           : in STD_LOGIC;
-		     start_frame   : in STD_LOGIC;
-		     x, y          : in positive;
-		 pixel_data       : in std_logic_vector(23 downto 0);
-	     pixel_data_ready : in STD_LOGIC;
-	     sensor_data      : in sensor;
-	     sensor_data_ready : in STD_LOGIC);
+		Port(resetn            : in STD_LOGIC;
+		     clk               : in STD_LOGIC;
+		     start_frame       : in STD_LOGIC;
+		     x, y              : in positive;
+		     pixel_data        : in std_logic_vector(23 downto 0);
+		     pixel_data_ready  : in STD_LOGIC;
+		     sensor_data       : in sensor_vector;
+		     sensor_data_ready : in STD_LOGIC);
 	end component;
 
 begin
@@ -103,56 +101,32 @@ begin
 	modul : cam_move
 		port map(clk               => clk,
 		         resetn            => reset,
-		         pclk              => pclk,
 		         hsync_in          => cam_hsync,
 		         vsync_in          => cam_vsync,
 		         href_in           => cam_href,
 		         cam_pxdata        => px_data,
 		         ---
+		         cam_clk           => pclk,
 		         px_number         => x,
 		         line_number       => y,
-		         pixel_data   => data_to_wreiter,
-	     		pixel_data_ready  => data_to_wreiter_ready,
+		         pixel_data        => data_to_wreiter,
+		         pixel_data_ready  => data_to_wreiter_ready,
 		         sensor_data       => tmp_sensor,
 		         sensor_data_ready => tmp_sensor_ready
 		        );
 
 	output : bmp_wreiter
 		port map(
-			resetn        => reset,
-			clk           => clk,
-			start_frame   => cam_vsync,
-			x             => x,
-			y             => y,
-		 pixel_data   => data_to_wreiter,
-	     pixel_data_ready  => data_to_wreiter_ready,
-	     sensor_data    => tmp_sensor,
-	     sensor_data_ready => tmp_sensor_ready
+			resetn            => reset,
+			clk               => clk,
+			start_frame       => cam_vsync,
+			x                 => x,
+			y                 => y,
+			pixel_data        => data_to_wreiter,
+			pixel_data_ready  => data_to_wreiter_ready,
+			sensor_data       => tmp_sensor,
+			sensor_data_ready => tmp_sensor_ready
 		);
-
-	pclk_pr : process(clk) is
-		variable n : integer := 0;
-
-	begin
-		if rising_edge(clk) then
-			if reset = '0' then
-				n := 0;
-			else
-				n := n + 1;
-
-				if n > pclk_to_clk_rate then
-					pclk <= '1';
-				else
-					pclk <= '0';
-				end if;
-
-				if n = 2*pclk_to_clk_rate then
-					n := 0;
-				end if;
-
-			end if;
-		end if;
-	end process pclk_pr;
 
 	clk <= not clk after 10 ns;
 
