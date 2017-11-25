@@ -12,17 +12,18 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="42560043750000fs"></ZoomStartTime>
-      <ZoomEndTime time="42560531250001fs"></ZoomEndTime>
-      <Cursor1Time time="42560450000000fs"></Cursor1Time>
+      <ZoomStartTime time="29291043208132fs"></ZoomStartTime>
+      <ZoomEndTime time="29291203959343fs"></ZoomEndTime>
+      <Cursor1Time time="29291070000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="155"></NameColumnWidth>
-      <ValueColumnWidth column_width="73"></ValueColumnWidth>
+      <NameColumnWidth column_width="241"></NameColumnWidth>
+      <ValueColumnWidth column_width="213"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="15" />
    <wave_markers>
       <marker time="1976920000000" label="" />
+      <marker time="0" label="" />
    </wave_markers>
    <wvobject fp_name="/s_top/input/pixel_data_temp" type="array">
       <obj_property name="ElementShortName">pixel_data_temp[23:0]</obj_property>
@@ -57,33 +58,32 @@
       <obj_property name="ElementShortName">px_data_out[23:0]</obj_property>
       <obj_property name="ObjectShortName">px_data_out[23:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/s_top/modul/outbus_free" type="logic">
+      <obj_property name="ElementShortName">outbus_free</obj_property>
+      <obj_property name="ObjectShortName">outbus_free</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/tmp_sensor_data_ready" type="array">
+      <obj_property name="ElementShortName">tmp_sensor_data_ready[4:0]</obj_property>
+      <obj_property name="ObjectShortName">tmp_sensor_data_ready[4:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/s_top/modul/sensor_data" type="array">
-      <obj_property name="ElementShortName">sensor_data</obj_property>
-      <obj_property name="ObjectShortName">sensor_data</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+      <obj_property name="ElementShortName">sensor_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">sensor_data[63:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/modul/sensor_data_ready" type="logic">
       <obj_property name="ElementShortName">sensor_data_ready</obj_property>
       <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/modul/pixel_data" type="array">
-      <obj_property name="ElementShortName">pixel_data[23:0]</obj_property>
-      <obj_property name="ObjectShortName">pixel_data[23:0]</obj_property>
+   <wvobject fp_name="/s_top/modul/\generate_sensors(5)\/sensor_gate_inst/outbus_free" type="logic">
+      <obj_property name="ElementShortName">outbus_free</obj_property>
+      <obj_property name="ObjectShortName">outbus_free</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/modul/pixel_data_ready" type="logic">
-      <obj_property name="ElementShortName">pixel_data_ready</obj_property>
-      <obj_property name="ObjectShortName">pixel_data_ready</obj_property>
+   <wvobject fp_name="/s_top/modul/\generate_sensors(5)\/sensor_gate_inst/sensor_out" type="array">
+      <obj_property name="ElementShortName">sensor_out[63:0]</obj_property>
+      <obj_property name="ObjectShortName">sensor_out[63:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/output/px_data_tmp" type="array">
-      <obj_property name="ElementShortName">px_data_tmp[23:0]</obj_property>
-      <obj_property name="ObjectShortName">px_data_tmp[23:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/output/sensor_data" type="array">
-      <obj_property name="ElementShortName">sensor_data</obj_property>
-      <obj_property name="ObjectShortName">sensor_data</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/output/sensor_data_ready" type="logic">
-      <obj_property name="ElementShortName">sensor_data_ready</obj_property>
-      <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
+   <wvobject fp_name="/s_top/modul/\generate_sensors(5)\/sensor_gate_inst/sensor_converted" type="logic">
+      <obj_property name="ElementShortName">sensor_converted</obj_property>
+      <obj_property name="ObjectShortName">sensor_converted</obj_property>
    </wvobject>
 </wave_config>

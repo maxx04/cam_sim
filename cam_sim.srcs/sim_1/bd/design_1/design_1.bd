@@ -130,34 +130,6 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>px_number_0</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
-          <spirit:name>line_number_0</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
-          <spirit:name>pixel_data_0</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-            <spirit:vector>
-              <spirit:left>23</spirit:left>
-              <spirit:right>0</spirit:right>
-            </spirit:vector>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
-          <spirit:name>pixel_data_ready_0</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
           <spirit:name>sensor_data_0</spirit:name>
           <spirit:wire>
             <spirit:direction>out</spirit:direction>
@@ -227,26 +199,6 @@
         <spirit:name>hsync_in_0_1</spirit:name>
         <spirit:externalPortReference spirit:portRef="hsync_in_0"/>
         <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="hsync_in"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>cam_move_0_px_number</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="px_number"/>
-        <spirit:externalPortReference spirit:portRef="px_number_0"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>cam_move_0_line_number</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="line_number"/>
-        <spirit:externalPortReference spirit:portRef="line_number_0"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>cam_move_0_pixel_data</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="pixel_data"/>
-        <spirit:externalPortReference spirit:portRef="pixel_data_0"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>cam_move_0_pixel_data_ready</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="cam_move_0" spirit:portRef="pixel_data_ready"/>
-        <spirit:externalPortReference spirit:portRef="pixel_data_ready_0"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
         <spirit:name>cam_move_0_sensor_data</spirit:name>

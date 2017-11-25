@@ -41,7 +41,7 @@ entity cam_move is
 	     href_in           : in  std_logic;
 	     cam_pxdata        : in  STD_LOGIC_VECTOR(7 downto 0);
 	     -----
-	     cam_clk              : out STD_LOGIC;
+	     cam_clk           : out STD_LOGIC;
 	     px_number         : out natural range 0 to 1024 := 0;
 	     line_number       : out natural range 0 to 1024 := 0;
 	     pixel_data        : out std_logic_vector(23 downto 0);
@@ -56,10 +56,10 @@ architecture Behavioral of cam_move is
 	signal tmp_pixel_data_ready : std_logic               := '0';
 	signal tmp_pixel_data       : std_logic_vector(23 downto 0);
 	signal x, y                 : integer range 0 to 1024 := 0;
-	signal pclk              : STD_LOGIC;
-	constant pclk_to_clk_rate   : integer                 := 5;
-	
-	signal outbus_free : STD_LOGIC;
+	signal pclk                 : STD_LOGIC;
+	constant pclk_to_clk_rate   : integer                 := 2;
+
+	signal outbus_free           : STD_LOGIC;
 	signal tmp_sensor_data_ready : STD_LOGIC_VECTOR(4 downto 0);
 
 	component get_mark_points
@@ -120,19 +120,13 @@ begin
 			px_data_out    => tmp_pixel_data
 		);
 
-		outbus_free <= or_reduct( tmp_sensor_data_ready); -- FIXME ein Takt dazu wird gebraucht
-
 
 	generate_sensors : for i in 1 to 5 generate
 
-		signal tmp_sensor            : sensor;
-
-		
+		signal tmp_sensor : sensor;
 
 	begin
-		
 
-		
 		sensor_inst : component check_sensor
 			generic map(sensor_position => (i*20, 50))
 			port map(
@@ -143,14 +137,14 @@ begin
 				pixel_data        => tmp_pixel_data,
 				pixel_data_ready  => tmp_pixel_data_ready,
 				sensor_data       => tmp_sensor,
-				sensor_data_ready => tmp_sensor_data_ready(i-1)
+				sensor_data_ready => tmp_sensor_data_ready(i - 1)
 			);
 
 		sensor_gate_inst : component sensor_gate
 			port map(
 				clk               => clk,
 				resetn            => resetn,
-				sensor_ready      => tmp_sensor_data_ready(i-1),
+				sensor_ready      => tmp_sensor_data_ready(i - 1),
 				sensor_in         => tmp_sensor,
 				outbus_free       => outbus_free,
 				sensor_out        => sensor_data,
@@ -160,7 +154,6 @@ begin
 	end generate generate_sensors;
 
 	pclk_pr : process(clk) is
-
 		variable n : integer := 0;
 
 	begin
@@ -184,22 +177,16 @@ begin
 			end if;
 		end if;
 	end process pclk_pr;
-	
---check_bus : process (clk) is
---begin
---	if rising_edge(clk) then
---		if resetn = '0' then
---			outbus_free <= '0';
---		else
---			if tmp_sensor_data_ready = '1' then
---				outbus_free <= '0';
---			else
---				outbus_free <= '1';
---			end if;
---			
---		end if;
---	end if;
---end process check_bus;
 
+	check_bus : process(clk) is -- ist notwendig für clock Verschiebung
+	begin
+		if rising_edge(clk) then
+			if resetn = '0' then
+				outbus_free <= '0';
+			else
+				outbus_free <= not or_reduct(tmp_sensor_data_ready);
+			end if;
+		end if;
+	end process check_bus;
 
 end Behavioral;

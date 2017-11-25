@@ -46,37 +46,27 @@ end sensor_gate;
 
 architecture Behavioral of sensor_gate is
 
-	signal sensor_tmp       : sensor_vector;
-	signal sensor_converted : std_logic;
-
 begin
 	convert : process(clk) is
 	begin
 		if rising_edge(clk) then
 			if resetn = '0' then
-				sensor_tmp       <= (others => '0');
-				sensor_converted <= '0';
+				sensor_out        <= (others => 'Z');
+				sensor_data_ready <= 'Z';
 			else
+				sensor_out        <= (others => 'Z');
+				sensor_data_ready <= 'Z';
+				
 				if (sensor_ready = '1') then
-					sensor_tmp       <= sensor2vector(sensor_in);
-					sensor_converted <= '1';
-				else
-					sensor_converted <= '0';
+					if outbus_free = '1' then
+						sensor_out        <= sensor2vector(sensor_in);
+						sensor_data_ready <= '1';
+					end if;
+
 				end if;
-				
---				if outbus_free = '1' then
---					sensor_data_ready <= '0';
---				else
---					sensor_data_ready <= '1';
---				end if;
-				
+
 			end if;
 		end if;
 	end process convert;
-
-	bus_high : sensor_out <= sensor_tmp when outbus_free = '1' and sensor_converted = '1' else (others => 'Z');
-	ready_high : sensor_data_ready <= '1' when outbus_free = '1' and sensor_converted = '1' else  'Z';
-	
-	
 
 end Behavioral;
