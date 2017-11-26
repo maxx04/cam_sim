@@ -1,13 +1,17 @@
 #-----------------------------------------------------------
-# Vivado v2017.2.1 (64-bit)
-# SW Build 1957588 on Wed Aug  9 16:32:24 MDT 2017
-# IP Build 1948039 on Wed Aug  9 18:19:28 MDT 2017
-# Start of session at: Sun Oct  8 14:13:46 2017
-# Process ID: 9324
+# Vivado v2017.3 (64-bit)
+# SW Build 2018833 on Wed Oct  4 19:58:22 MDT 2017
+# IP Build 2016188 on Wed Oct  4 21:52:56 MDT 2017
+# Start of session at: Sun Nov 26 12:07:07 2017
+# Process ID: 14460
 # Current directory: C:/Users/maxx/Documents/Projects/cam_sim
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent8688 C:\Users\maxx\Documents\Projects\cam_sim\cam_sim.xpr
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent6560 C:\Users\maxx\Documents\Projects\cam_sim\cam_sim.xpr
 # Log file: C:/Users/maxx/Documents/Projects/cam_sim/vivado.log
 # Journal file: C:/Users/maxx/Documents/Projects/cam_sim\vivado.jou
 #-----------------------------------------------------------
 start_gui
 open_project C:/Users/maxx/Documents/Projects/cam_sim/cam_sim.xpr
+update_compile_order -fileset sources_1
+close [ open C:/Users/maxx/Documents/Projects/cam_sim/cam_sim.srcs/sources_1/new/sensor_calc_move.vhd w ]
+add_files C:/Users/maxx/Documents/Projects/cam_sim/cam_sim.srcs/sources_1/new/sensor_calc_move.vhd
+update_compile_order -fileset sources_1

@@ -65,7 +65,7 @@ begin
 		variable index            : integer range 31 downto 0              := 0;
 		variable old_pixel_cnt    : positive range 1 TO 1024;
 		variable p                : pixel;
-		variable p_sum, color_tmp : RGB_COLOR;
+		variable p_sum : RGB_COLOR;
 		variable shifts           : shift_position                         := (0, 2, 4, 5, 6, 7, 8, 8, 8, 8, 8, 7, 6, 5, 4, 2, 0);
 
 	begin
@@ -100,11 +100,9 @@ begin
 						if (pixel_cnt = sensor_position.x - 1 + sighn*shifts(i)) then --FIXME Vereinheitlichen Pixel faengt von 1 und nicht von 0
 							-- index wird von oben nach unten berechnet
 
-							color_tmp.r := to_integer(unsigned(pixel_data(7 downto 0)));
-							color_tmp.g := to_integer(unsigned(pixel_data(15 downto 8)));
-							color_tmp.b := to_integer(unsigned(pixel_data(23 downto 16)));
-
-							px_colors(index) <= color_tmp;
+							px_colors(index).r <= to_integer(unsigned(pixel_data(7 downto 0)));
+							px_colors(index).g <= to_integer(unsigned(pixel_data(15 downto 8)));
+							px_colors(index).b <= to_integer(unsigned(pixel_data(23 downto 16)));
 
 							p.pos.x := pixel_cnt;
 							p.pos.y := line_cnt;
@@ -112,7 +110,7 @@ begin
 							new_value <= '1';
 
 							--- Prozedur neues pixel Berechnung
-							p_sum := middle_value(color_tmp, p_sum);
+--							p_sum := middle_value(color_tmp, p_sum);
 							--- End Prozedur	
 
 							-- am Ende wenn alle Sensorpunkte durch sind	
@@ -143,16 +141,6 @@ begin
 	end process fill_points;
 
 	calc_sensor : process(clk) is
---		procedure calc_s(in_colors : in color_array; signal sensor_out : out sensor) is
---			variable values : diff_array;
---		begin
---
---			for i in 0 to 30 loop
---				values(i) := color_distance(in_colors(i), in_colors(i + 1));
---			end loop;
---			values(31) := color_distance(in_colors(31), in_colors(0));
---
---		end procedure calc_s;
 
 		variable values_1         : diff_array;
 		variable max_value        : integer range -255 to 255 := 0;
@@ -163,15 +151,15 @@ begin
 	begin
 		if (clk'event and clk = '1') then
 			if resetn = '0' then
---				sensor_data_ready <= '0'; -- TODO rest initialisieren
+				sensor_data_ready <= '0'; -- TODO rest initialisieren
 			else
 				sensor_data_ready <= '0';
-				--sensor_data <= (others => 'Z');
 				if all_points_ready = '1' then
-					--					calc_s(px_colors, sensor_data);		
+					--					calc_s(px_colors, sensor_data);	-- TODO als entity oder Procedur erstellen	
 
 					-- berechne diffs
 					max_value    := color_distance(px_colors(31), px_colors(0));
+
 					min_value    := max_value;
 					values_1(31) := max_value;
 

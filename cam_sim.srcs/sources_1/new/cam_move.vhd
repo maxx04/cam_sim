@@ -96,6 +96,17 @@ architecture Behavioral of cam_move is
 		     sensor_data_ready : out std_logic
 		    );
 	end component;
+	
+	component sensor_calc_move is
+    Port ( clk : in STD_LOGIC;
+           resetn : in STD_LOGIC;
+           datata_in_ready : in STD_LOGIC;
+           sensor_data : in sensor;
+           
+           move_vector_x : out integer  range -255 to 255;
+           move_vector_y : out integer  range -255 to 255
+           );
+end component sensor_calc_move;
 
 begin
 
