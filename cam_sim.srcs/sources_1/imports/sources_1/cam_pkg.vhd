@@ -29,6 +29,8 @@ package CAM_PKG is
 	constant Image_Width  : positive := 480;
 	constant Image_Hight  : positive := 640;
 	constant bytes_per_px : positive := 3;
+	constant pclk_to_clk_rate   : integer  := 2;
+	constant sensors_number     : integer := 5;
 
 	subtype int8u is integer range 0 to 255;
 
@@ -66,6 +68,7 @@ package CAM_PKG is
 	function color_distance(Pixel0 : in RGB_COLOR; Pixel1 : in RGB_COLOR) return integer;
 	function sensor2vector(sensor_t : sensor) return sensor_vector;
 	function vector2sensor(slv : sensor_vector) return sensor;
+	function get_ram_addr_color(sensor_nr : in integer; index : in integer) return std_logic_vector;
 	function or_reduct(slv : in std_logic_vector) return std_logic;
 
 end package CAM_PKG;
@@ -96,6 +99,15 @@ package body CAM_PKG is
 	begin
 		return (((Pixel0.r + Pixel0.g + Pixel0.b) - (Pixel1.r + Pixel1.g + Pixel1.b)));
 	end function color_distance;
+	
+	function get_ram_addr_color(sensor_nr : in integer; index : in integer) return std_logic_vector is
+		constant sensor_mem_length : integer := 32;
+		variable r : std_logic_vector(11 downto 0);
+	begin
+		r := std_logic_vector(to_unsigned((sensor_nr  * sensor_mem_length + index),12));
+		return r;
+		
+	end function get_ram_addr_color;
 
 	function sensor2vector(sensor_t : sensor) return sensor_vector is
 		variable slv : sensor_vector;

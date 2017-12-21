@@ -30,33 +30,33 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity get_mark_points is
+entity get_pixel_data is
 	GENERIC(byte_per_pixel : natural := 3;
 	        width          : natural := 480;
 	        hight          : natural := 640);
-	        
-	PORT(resetn      : in  STD_LOGIC;
-	     clk         : in  STD_LOGIC;
-	     vsync       : in  STD_LOGIC;
-	     href        : in  STD_LOGIC;
-	     px_data     : in  STD_LOGIC_VECTOR(7 downto 0);
+
+	PORT(resetn                : in  STD_LOGIC;
+	     clk                         : in  STD_LOGIC;
+	     vsync                     : in  STD_LOGIC;
+	     href                       : in  STD_LOGIC;
+	     px_data                  : in  STD_LOGIC_VECTOR(7 downto 0);
 	     --- out
-	     data_ready : out STD_LOGIC; -- auf steigende flanke clk, data abnehmen
+	     data_ready                   : out STD_LOGIC; -- auf steigende flanke clk, data abnehmen
 	     px_count_out, line_count_out : out positive;
-	     px_data_out : out STD_LOGIC_VECTOR(byte_per_pixel*8 - 1 downto 0)
+	     px_data_ready                : out std_logic;
+	     px_data_out                  : out STD_LOGIC_VECTOR(byte_per_pixel*8 - 1 downto 0)
 	    );
-end get_mark_points;
+end get_pixel_data;
 
-architecture Behavioral of get_mark_points is
+architecture Behavioral of get_pixel_data is -- TODO optimierung moeglich
 
-	signal bit_number           : natural   := 0;
+	signal bit_number : natural := 0;
 
 begin
-	
-	byte_counts : process(clk)
 
-    variable px_count, line_count : natural   := 0;		
-		
+	byte_counts : process(clk)
+		variable px_count, line_count : natural := 0;
+
 	begin
 		if (clk'event and clk = '0') then
 
@@ -93,16 +93,15 @@ begin
 
 					px_count   := 0;
 					bit_number <= 0;
-					
+
 				end if;
-				
+
 				if px_count = width then
 					line_count := line_count + 1;
 				end if;
-				
-				px_count_out <= px_count;
+
+				px_count_out   <= px_count;
 				line_count_out <= line_count;
-				
 
 			end if;
 		end if;
