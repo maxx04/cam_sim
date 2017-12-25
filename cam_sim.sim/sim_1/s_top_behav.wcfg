@@ -12,18 +12,19 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="11548191066667fs"></ZoomStartTime>
-      <ZoomEndTime time="11548364666668fs"></ZoomEndTime>
-      <Cursor1Time time="11548210000000fs"></Cursor1Time>
+      <ZoomStartTime time="11717033000000fs"></ZoomStartTime>
+      <ZoomEndTime time="11717255200001fs"></ZoomEndTime>
+      <Cursor1Time time="11717130000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="241"></NameColumnWidth>
-      <ValueColumnWidth column_width="205"></ValueColumnWidth>
+      <ValueColumnWidth column_width="189"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="12" />
+   <WVObjectSize size="33" />
    <wave_markers>
       <marker time="1976920000000" label="" />
       <marker time="0" label="" />
+      <marker time="11716470000000" label="" />
    </wave_markers>
    <wvobject fp_name="/s_top/input/pixel_data_temp" type="array">
       <obj_property name="ElementShortName">pixel_data_temp[23:0]</obj_property>
@@ -58,21 +59,104 @@
       <obj_property name="ElementShortName">px_data_out[23:0]</obj_property>
       <obj_property name="ObjectShortName">px_data_out[23:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/s_top/modul/cam_to_pixel/px_data_ready" type="logic">
+      <obj_property name="ElementShortName">px_data_ready</obj_property>
+      <obj_property name="ObjectShortName">px_data_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/sensors_filled" type="logic">
+      <obj_property name="ElementShortName">sensors_filled</obj_property>
+      <obj_property name="ObjectShortName">sensors_filled</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/ram_we" type="logic">
+      <obj_property name="ElementShortName">ram_we</obj_property>
+      <obj_property name="ObjectShortName">ram_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/ram_en" type="logic">
+      <obj_property name="ElementShortName">ram_en</obj_property>
+      <obj_property name="ObjectShortName">ram_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/ram_addr" type="array">
+      <obj_property name="ElementShortName">ram_addr[11:0]</obj_property>
+      <obj_property name="ObjectShortName">ram_addr[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/ram_addr_read" type="array">
+      <obj_property name="ElementShortName">ram_addr_read[11:0]</obj_property>
+      <obj_property name="ObjectShortName">ram_addr_read[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/ram_addr_write" type="array">
+      <obj_property name="ElementShortName">ram_addr_write[11:0]</obj_property>
+      <obj_property name="ObjectShortName">ram_addr_write[11:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/s_top/modul/ram_write_enable" type="array">
       <obj_property name="ElementShortName">ram_write_enable[0:0]</obj_property>
       <obj_property name="ObjectShortName">ram_write_enable[0:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/modul/ram_data" type="array">
-      <obj_property name="ElementShortName">ram_data[23:0]</obj_property>
-      <obj_property name="ObjectShortName">ram_data[23:0]</obj_property>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/move_vector_x" type="other">
+      <obj_property name="ElementShortName">move_vector_x</obj_property>
+      <obj_property name="ObjectShortName">move_vector_x</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/modul/ram_addr" type="array">
-      <obj_property name="ElementShortName">ram_addr[6:0]</obj_property>
-      <obj_property name="ObjectShortName">ram_addr[6:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/move_vector_y" type="other">
+      <obj_property name="ElementShortName">move_vector_y</obj_property>
+      <obj_property name="ObjectShortName">move_vector_y</obj_property>
    </wvobject>
-   <wvobject fp_name="/s_top/modul/cam_to_pixel/px_data_ready" type="logic">
-      <obj_property name="ElementShortName">px_data_ready</obj_property>
-      <obj_property name="ObjectShortName">px_data_ready</obj_property>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/sensor_calculated" type="logic">
+      <obj_property name="ElementShortName">sensor_calculated</obj_property>
+      <obj_property name="ObjectShortName">sensor_calculated</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/sensor_data_ready" type="logic">
+      <obj_property name="ElementShortName">sensor_data_ready</obj_property>
+      <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/sensor_n" type="other">
+      <obj_property name="ElementShortName">sensor_n</obj_property>
+      <obj_property name="ObjectShortName">sensor_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/calc_move_inst/index" type="other">
+      <obj_property name="ElementShortName">index</obj_property>
+      <obj_property name="ObjectShortName">index</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/ram_data_in" type="array">
+      <obj_property name="ElementShortName">ram_data_in[23:0]</obj_property>
+      <obj_property name="ObjectShortName">ram_data_in[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/ram_data_out" type="array">
+      <obj_property name="ElementShortName">ram_data_out[23:0]</obj_property>
+      <obj_property name="ObjectShortName">ram_data_out[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/sensor_gate_inst/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/sensor_gate_inst/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/sensor_gate_inst/sensor_ready" type="logic">
+      <obj_property name="ElementShortName">sensor_ready</obj_property>
+      <obj_property name="ObjectShortName">sensor_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/sensor_gate_inst/sensor_in" type="array">
+      <obj_property name="ElementShortName">sensor_in</obj_property>
+      <obj_property name="ObjectShortName">sensor_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/sensor_gate_inst/outbus_free" type="logic">
+      <obj_property name="ElementShortName">outbus_free</obj_property>
+      <obj_property name="ObjectShortName">outbus_free</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/sensor_gate_inst/sensor_out" type="array">
+      <obj_property name="ElementShortName">sensor_out[63:0]</obj_property>
+      <obj_property name="ObjectShortName">sensor_out[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/sensor_gate_inst/sensor_data_ready" type="logic">
+      <obj_property name="ElementShortName">sensor_data_ready</obj_property>
+      <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
    </wvobject>
 </wave_config>

@@ -3,7 +3,7 @@
 -- Engineer: 
 -- 
 -- Create Date: 13.10.2017 18:52:36
--- Design Name: 
+-- Design Name:  
 -- Module Name: cam_move - Behavioral
 -- Project Name: 
 -- Target Devices: 
@@ -46,7 +46,7 @@ entity cam_move is
 	     line_number       : out natural range 0 to 1024 := 0;
 	     pixel_data        : out std_logic_vector(23 downto 0);
 	     pixel_data_ready  : out STD_LOGIC;
-	     sensor_data       : out sensor_vector;
+	     sensor_data       : out sensor_vector; -- ausgabe in vector form
 	     sensor_data_ready : out STD_LOGIC
 	    );
 end cam_move;
@@ -64,6 +64,8 @@ architecture Behavioral of cam_move is
 	signal ram_addr         : std_logic_vector(11 downto 0);
 	signal ram_addr_read    : std_logic_vector(11 downto 0);
 	signal ram_addr_write   : std_logic_vector(11 downto 0);
+	signal out_sensor       : sensor;
+	signal out_sensor_ready : std_logic;
 
 	signal outbus_free           : std_logic;
 	signal tmp_sensor_data_ready : STD_LOGIC_VECTOR(sensors_number - 1 downto 0);
@@ -101,15 +103,15 @@ architecture Behavioral of cam_move is
 
 	component sensor_calc_move is
 
-		Port(clk            : in  STD_LOGIC;
-		     resetn         : in  STD_LOGIC;
-		     sensors_filled : in  std_logic;
-		     ram_we         : in  std_logic;
-		     ram_en         : in  std_logic;
-		     ram_data       : in  std_logic_vector(23 downto 0);
-		     ram_addr       : out std_logic_vector(11 downto 0);
-		     move_vector_x  : out integer range -255 to 255;
-		     move_vector_y  : out integer range -255 to 255
+		Port(clk               : in  STD_LOGIC;
+		     resetn            : in  STD_LOGIC;
+		     sensors_filled    : in  std_logic;
+		     ram_we            : in  std_logic;
+		     ram_en            : in  std_logic;
+		     ram_data          : in  std_logic_vector(23 downto 0);
+		     ram_addr          : out std_logic_vector(11 downto 0);
+		     sensor_out        : out sensor;
+		     sensor_data_ready : out std_logic
 		    );
 	end component sensor_calc_move;
 
@@ -124,6 +126,17 @@ architecture Behavioral of cam_move is
 		);
 
 	end component blk_mem_gen_0;
+	
+component sensor_gate is
+	Port(clk               : in  STD_LOGIC;
+	     resetn            : in  STD_LOGIC;
+	     sensor_ready      : in  STD_LOGIC;
+	     sensor_in         : in  sensor;
+	     outbus_free       : in  STD_LOGIC;
+	     sensor_out        : out sensor_vector;
+	     sensor_data_ready : out std_logic
+	    );
+end component sensor_gate;
 
 begin
 
@@ -148,7 +161,7 @@ begin
 			px_data_out    => tmp_pixel_data
 		);
 
-	generate_sensors : for i in 1 to sensors_number generate
+	generate_sensors_x : for n in 1 to sensors_number generate
 
 		--		signal tmp_sensor : sensor;
 
@@ -156,8 +169,8 @@ begin
 
 		sensor_inst : component check_sensor
 			generic map(
-				sensor_number   => i,
-				sensor_position => (i *20, 50)
+				sensor_number   => n,
+				sensor_position => (n * 20 + 100 , 250)
 			)
 			port map(
 				resetn            => resetn,
@@ -168,16 +181,15 @@ begin
 				pixel_data_ready  => tmp_pixel_data_ready,
 				ram_ready         => '1',
 				sensor_data       => open,
-				sensor_data_ready => tmp_sensor_data_ready(i - 1),
+				sensor_data_ready => tmp_sensor_data_ready(n - 1),
 				ram_we            => ram_write_enable(0),
 				ram_adress        => ram_addr_write,
 				ram_data          => ram_data_in
 			);
 
-	end generate generate_sensors;
+	end generate generate_sensors_x;
 
-	-- FIXME einen signal erstellen zur adresssteuerung
-	addr_switch : ram_addr <= ram_addr_write when tmp_sensor_data_ready(sensors_number - 1) = '1' else ram_addr_read;
+	addr_switch : ram_addr <= ram_addr_write when ram_write_enable(0) = '1' else ram_addr_read;
 
 	ram_inst : blk_mem_gen_0
 		port map(
@@ -191,18 +203,28 @@ begin
 
 	calc_move_inst : sensor_calc_move
 		port map(
-			clk            => clk,
-			resetn         => resetn,
-			sensors_filled => tmp_sensor_data_ready(sensors_number - 1), -- letzte sensor gefuellt
-			ram_we         => ram_write_enable(0),
+			clk               => clk,
+			resetn            => resetn,
+			sensors_filled    => tmp_sensor_data_ready(sensors_number - 1), -- letzte sensor gefuellt
+			ram_we            => ram_write_enable(0),
 			-- sensor nr zum berechnen
-			-- 
-			ram_en         => '1',
-			ram_data       => ram_data_out,
-			ram_addr       => ram_addr_read,
-			move_vector_x  => open,
-			move_vector_y  => open
+			ram_en            => '1',
+			ram_data          => ram_data_out,
+			ram_addr          => ram_addr_read,
+			sensor_out        => out_sensor,
+			sensor_data_ready => out_sensor_ready
 		);
+		
+		sensor_gate_inst: sensor_gate
+			port map(
+				clk               => clk,
+				resetn            => resetn,
+				sensor_ready      => out_sensor_ready,
+				sensor_in         => out_sensor,
+				outbus_free       => outbus_free, -- FIXME neu erstellen
+				sensor_out        => sensor_data,
+				sensor_data_ready => sensor_data_ready
+			);
 
 	pclk_pr : process(clk) is
 		variable n : integer := 0;
@@ -235,7 +257,7 @@ begin
 			if resetn = '0' then
 				outbus_free <= '0';
 			else
-				outbus_free <= not or_reduct(tmp_sensor_data_ready);
+				outbus_free <= '1'; --not or_reduct(tmp_sensor_data_ready);
 			end if;
 		end if;
 	end process check_bus;

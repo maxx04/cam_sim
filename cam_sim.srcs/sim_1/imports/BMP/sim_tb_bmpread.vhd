@@ -19,7 +19,6 @@
 -- 2006-12-05  1.0      kest            Created
 -------------------------------------------------------------------------------
 
-
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.NUMERIC_STD.ALL;

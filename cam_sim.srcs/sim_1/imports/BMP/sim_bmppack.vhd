@@ -57,8 +57,9 @@ package sim_bmppack is
 
   procedure GetPixel (x : in integer; y : in integer; signal data : out std_logic_vector(23 downto 0));
   procedure SetPixel (x : in integer; y : in integer; signal data : in std_logic_vector(23 downto 0));
+  procedure SetPixelV (x : in integer; y : in integer; variable data : in std_logic_vector(23 downto 0));
   	
-  procedure DrawCross (x : in integer; y : in integer; signal data : in std_logic_vector(23 downto 0));
+  procedure DrawCross (x : in integer; y : in integer; variable data : in std_logic_vector(23 downto 0));
   
 end package sim_bmppack;
 
@@ -167,13 +168,22 @@ package body sim_bmppack is
     end if;
 end SetPixel;
 
-procedure DrawCross (x : in integer; y : in integer; signal data : in std_logic_vector(23 downto 0)) is
+  procedure SetPixelV (x : in integer; y : in integer; variable data : in std_logic_vector(23 downto 0)) is
+  begin
+    if x >= 0 and x < cMAX_X and y >= 0 and y < cMAX_Y then
+      memory_out(x*3+y*(GetWidth(header)*3))   := data(23 downto 16);
+      memory_out(x*3+1+y*(GetWidth(header)*3)) := data(15 downto 8);
+      memory_out(x*3+2+y*(GetWidth(header)*3)) := data(7 downto 0);
+    end if;
+end SetPixelV;
+
+procedure DrawCross (x : in integer; y : in integer; variable data : in std_logic_vector(23 downto 0)) is
 	constant CrossSize : integer := 5;
 begin
 	
 	for n in -CrossSize to CrossSize loop
-		SetPixel(x+n,y,data);
-		SetPixel(x,y+n,data);
+		SetPixelV(x+n,y,data);
+		SetPixelV(x,y+n,data);
 	end loop;
 
 end DrawCross;

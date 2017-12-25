@@ -18,6 +18,7 @@
 -- 
 ----------------------------------------------------------------------------------
 
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -51,7 +52,7 @@ architecture Behavioral of s_top is
 
 	component sim_tb_bmpread
 		port(resetn                                           : in  std_logic;
-		     pclk                                             : in  std_logic;
+		     pclk                                           		: in  std_logic;
 		     pixel_data                                       : out std_logic_vector(7 downto 0);
 		     pixel_out_hsync, pixel_out_vsync, pixel_out_href : out std_logic);
 	end component;

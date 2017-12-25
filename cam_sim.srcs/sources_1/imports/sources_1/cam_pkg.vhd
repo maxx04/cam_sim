@@ -30,7 +30,7 @@ package CAM_PKG is
 	constant Image_Hight  : positive := 640;
 	constant bytes_per_px : positive := 3;
 	constant pclk_to_clk_rate   : integer  := 2;
-	constant sensors_number     : integer := 5;
+	constant sensors_number     : integer := 6;
 
 	subtype int8u is integer range 0 to 255;
 
@@ -70,6 +70,8 @@ package CAM_PKG is
 	function vector2sensor(slv : sensor_vector) return sensor;
 	function get_ram_addr_color(sensor_nr : in integer; index : in integer) return std_logic_vector;
 	function or_reduct(slv : in std_logic_vector) return std_logic;
+	function vector2rgb(pixel_vector : std_logic_vector(23 downto 0)) return RGB_COLOR;
+	function get_circle_shift( index : integer) return integer;
 
 end package CAM_PKG;
 
@@ -128,11 +130,26 @@ package body CAM_PKG is
 		sensor_t.pos.x   := to_integer(unsigned(slv(63 downto 52))); -- FIXME prüfen ob richtig funktioniert
 		sensor_t.pos.y   := to_integer(unsigned(slv(51 downto 40)));
 		sensor_t.color.r := to_integer(unsigned(slv(39 downto 32)));
-		sensor_t.color.r := to_integer(unsigned(slv(31 downto 24)));
-		sensor_t.color.r := to_integer(unsigned(slv(23 downto 16)));
+		sensor_t.color.g := to_integer(unsigned(slv(31 downto 24)));
+		sensor_t.color.b := to_integer(unsigned(slv(23 downto 16)));
 		sensor_t.max_pos := to_integer(signed(slv(15 downto 08)));
 		sensor_t.min_pos := to_integer(signed(slv(07 downto 00)));
 		return sensor_t;
+	end;
+	
+		function vector2rgb(pixel_vector : std_logic_vector(23 downto 0)) return RGB_COLOR is
+		variable rgb: RGB_COLOR;
+	begin
+		rgb.r := to_integer(unsigned(pixel_vector(7 downto 0)));
+		rgb.g := to_integer(unsigned(pixel_vector(15 downto 8)));
+		rgb.b := to_integer(unsigned(pixel_vector(23 downto 16)));
+		return rgb;
+	end;
+	
+	function get_circle_shift( index : integer) return integer is
+		variable shifts        : shift_position   := (0, 2, 4, 5, 6, 7, 8, 8, 8, 8, 8, 7, 6, 5, 4, 2, 0); -- FIXME schiftmatrix corrigieren
+	begin
+		return shifts(index);
 	end;
 
  function or_reduct(slv : in std_logic_vector) return std_logic is

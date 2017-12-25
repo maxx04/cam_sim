@@ -71,7 +71,6 @@ begin
 		variable old_pixel_cnt : positive range 1 TO 1024;
 --		variable p             : pixel;
 --		variable p_sum         : RGB_COLOR;
-		variable shifts        : shift_position   := (0, 2, 4, 5, 6, 7, 8, 8, 8, 8, 8, 7, 6, 5, 4, 2, 0); -- FIXME schiftmatrix corrigieren
 
 	begin
 		if (clk'event and clk = '0') then
@@ -85,8 +84,9 @@ begin
 				ram_adress <= (others => '0');
 				ram_data   <= (others => '0');
 				all_points_ready <= '0';
+				sensor_data_ready <= '0';
 			else
-
+				
 				new_value        <= '0'; -- neuen wert nur ein mal bei clk kommt
 				all_points_ready <= '0';
 				ram_we <= 'Z';
@@ -107,7 +107,7 @@ begin
 						end if;
 
 						-- und pixelreihenfolge von links nach rechts
-						if (pixel_cnt = sensor_position.x - 1 + sighn*shifts(i)) then --FIXME Vereinheitlichen Pixel faengt von 1 und nicht von 0
+						if (pixel_cnt = sensor_position.x - 1 + sighn*get_circle_shift(i)) then --FIXME Vereinheitlichen Pixel faengt von 1 und nicht von 0
 							-- index wird von oben nach unten berechnet
 
 --							px_colors(index).r <= to_integer(unsigned(pixel_data(7 downto 0)));
@@ -119,13 +119,13 @@ begin
 
 							new_value <= '1';
 
---							if ram_ready = '1' then -- FIXME not activated
+							if ram_ready = '1' then -- FIXME not activated
 								ram_we <=  '1';
 								ram_adress <=  get_ram_addr_color(sensor_number, index);
 								ram_data   <= pixel_data;
---							else
---								report "ram isnt ready" severity note;
---							end if;
+							else
+								report "ram isnt ready" severity note;
+							end if;
 
 							--- Prozedur neues pixel Berechnung
 							--	p_sum := middle_value(color_tmp, p_sum);
@@ -136,6 +136,7 @@ begin
 								i                := 0;
 								index            := 0;
 								all_points_ready <= '1';
+								sensor_data_ready <= '1';
 							end if;
 
 							if sighn = 1 then -- erstes sighn = -1
