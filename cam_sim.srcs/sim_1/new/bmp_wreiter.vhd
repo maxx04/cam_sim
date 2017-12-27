@@ -18,7 +18,6 @@
 -- 
 ----------------------------------------------------------------------------------
 
-
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.NUMERIC_STD.ALL;
@@ -45,35 +44,52 @@ end bmp_wreiter;
 
 architecture Behavioral of bmp_wreiter is
 
-
-	signal file_writed                    : std_logic                     := '0';
-	signal ImageWidth, ImageHeight, x_old : natural                       := 0;
-
+	signal file_writed                    : std_logic := '0';
+	signal ImageWidth, ImageHeight, x_old : natural   := 0;
 
 begin
 
 	writer : process is
+		variable tmp_sensor_vec : sensor_vector;
+		variable tmp_sensor     : sensor;
+		variable px_data_tmp    : std_logic_vector(23 downto 0);
+		variable xn, yn         : integer;
+		variable  sighn1 : integer := -1;
+		variable  sighn2 : integer := -1;
 
-	variable tmp_sensor_vec : sensor_vector;
-	variable  tmp_sensor                     : sensor;
-	variable px_data_tmp                    : std_logic_vector(23 downto 0);
-	
 	begin
 		wait until falling_edge(clk);
 
 		if resetn = '1' then
-		
-							if (sensor_data_ready = '1' ) then -- sensor abbilden
-					
-					tmp_sensor := vector2sensor(sensor_data);
-					
-					px_data_tmp (7 downto 0) := (others => '1');
-					px_data_tmp (15 downto 8) := (others => '0');
-					px_data_tmp (23 downto 16) := (others => '0');
-					
-					DrawCross(tmp_sensor.pos.x, tmp_sensor.pos.y, px_data_tmp);
-					
-				end if;
+
+			if (sensor_data_ready = '1') then -- sensor abbilden
+
+				tmp_sensor := vector2sensor(sensor_data);
+
+				px_data_tmp(7 downto 0)   := (others => '1');
+				px_data_tmp(15 downto 8)  := (others => '0');
+				px_data_tmp(23 downto 16) := (others => '0');
+
+				DrawCross(tmp_sensor.pos.x, tmp_sensor.pos.y, px_data_tmp);
+
+				for n in 0 to 31 loop
+
+					if n > 15 then
+						sighn1 := -sighn1;
+					end if;
+
+					if n > 7 or n > 23 then
+						sighn2 := -sighn2;
+					end if;
+
+					xn := tmp_sensor.pos.x - sighn1*get_circle_shift(n/2);
+					yn := tmp_sensor.pos.y + sighn2*get_circle_shift(n/2);
+
+					SetPixelV(xn, yn, px_data_tmp);
+
+				end loop;
+
+			end if;
 
 			if (x /= x_old) then
 				x_old <= x;
@@ -82,15 +98,13 @@ begin
 					SetPixel(x, y, pixel_data);
 				end if;
 
-
-
 				if (y = 640) then       -- FIXME ende schreiben, dann 
 
 					if file_writed = '0' then
 
 						report "write File...";
 
-						WriteFile(" ..\..\test_out.bmp");
+						WriteFile("  ..\..\..\..\..\..\test_out.bmp");
 						file_writed <= '1';
 
 						report "File is written.";
@@ -102,7 +116,6 @@ begin
 				end if;
 			end if;
 
-		
 		end if;
 
 	end process writer;

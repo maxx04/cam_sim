@@ -68,7 +68,7 @@ begin
 	begin
 		if (clk'event and clk = '0') then
 			if resetn = '0' then
-				sensor_data_ready <= '0'; -- TODO rest initialisieren
+				sensor_data_ready <= '0'; 
 				sensor_n          <= 1;
 				sensor_calculated <= '0';
 				ram_addr          <= (others => '0');
@@ -76,29 +76,23 @@ begin
 				sensor_data_ready <= '0';
 				ram_addr          <= (others => '0');
 
+				-- FIXME wenn mehr als 5 stop
 				if (sensors_filled = '1' or index /= 0) and sensor_n < 6 then -- FIXME ressourcen sparen			
 
 					--FIXME optimierung moeglich
 					case index is
-						when 0 =>
-							ram_addr <= get_ram_addr_color(sensor_n, index); -- stelle adress, daten kommen in ueber 2 takten
+					when 0 =>
+						-- stelle adress, daten kommen in 2 takten spaeter
+							ram_addr <= get_ram_addr_color(sensor_n, index); 
 							-- auch enable 
-
 							index <= index + 1;
-						-- für berechnungen immer index-1 benutzen !!!!!!!!!!!!!!!!!!!!!!!!!!!
-						when 1 =>       -- erst jetzt data vom index = 0 angekommen also bearbeitung für index 0
-						-- lese daten aus RAM -- FIXME als funktion
-							--px_colors_last := vector2rgb(ram_data);
-
-							px_colors_first := px_colors_last;
-
+						-- für berechnungen immer index-2 benutzen !!!!!!!!!!!!!!!!!!!!!!!!!!!
+						when 1 =>       
 							ram_addr  <= get_ram_addr_color(sensor_n, index); -- stelle naechstes adress
-							min_value := 0;
-							max_value := 0;
 							index     <= index + 1;
 							
 						when 2 =>       -- erst jetzt data vom index = 0 angekommen also bearbeitung für index 0
-						-- lese daten aus RAM -- FIXME als funktion
+						-- lese daten aus RAM 
 							px_colors_last := vector2rgb(ram_data);
 
 							px_colors_first := px_colors_last;
@@ -142,7 +136,7 @@ begin
 
 							sensor_calculated  <= '1';
 							index              <= 0;
-							sensor_n           <= sensor_n + 1; -- FIXME wenn mehr als 5 stop
+							sensor_n           <= sensor_n + 1; 
 
 						when others =>
 							-- lese daten aus RAM
