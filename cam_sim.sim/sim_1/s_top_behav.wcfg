@@ -12,19 +12,20 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="11717033000000fs"></ZoomStartTime>
-      <ZoomEndTime time="11717255200001fs"></ZoomEndTime>
-      <Cursor1Time time="11717130000000fs"></Cursor1Time>
+      <ZoomStartTime time="41476346750000fs"></ZoomStartTime>
+      <ZoomEndTime time="41476458650001fs"></ZoomEndTime>
+      <Cursor1Time time="41476440000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="241"></NameColumnWidth>
-      <ValueColumnWidth column_width="189"></ValueColumnWidth>
+      <ValueColumnWidth column_width="181"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="33" />
+   <WVObjectSize size="34" />
    <wave_markers>
       <marker time="1976920000000" label="" />
       <marker time="0" label="" />
       <marker time="11716470000000" label="" />
+      <marker time="39381970000000" label="" />
    </wave_markers>
    <wvobject fp_name="/s_top/input/pixel_data_temp" type="array">
       <obj_property name="ElementShortName">pixel_data_temp[23:0]</obj_property>
@@ -156,6 +157,10 @@
       <obj_property name="ObjectShortName">sensor_out[63:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/modul/sensor_gate_inst/sensor_data_ready" type="logic">
+      <obj_property name="ElementShortName">sensor_data_ready</obj_property>
+      <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/output/sensor_data_ready" type="logic">
       <obj_property name="ElementShortName">sensor_data_ready</obj_property>
       <obj_property name="ObjectShortName">sensor_data_ready</obj_property>
    </wvobject>

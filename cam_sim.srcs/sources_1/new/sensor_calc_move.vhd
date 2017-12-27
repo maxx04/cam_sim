@@ -50,7 +50,7 @@ architecture Behavioral of sensor_calc_move is
 
 	signal sensor_calculated : std_logic;
 	signal sensor_n          : integer range 1 to sensors_number;
-	signal index             : integer range 0 to 32 := 0;
+	signal index             : integer range 0 to 34:= 0;
 
 	signal move_vector_x : integer range -255 to 255;
 	signal move_vector_y : integer range -255 to 255;
@@ -81,12 +81,23 @@ begin
 					--FIXME optimierung moeglich
 					case index is
 						when 0 =>
-							ram_addr <= get_ram_addr_color(sensor_n, index); -- stelle adress
+							ram_addr <= get_ram_addr_color(sensor_n, index); -- stelle adress, daten kommen in ueber 2 takten
 							-- auch enable 
 
 							index <= index + 1;
 						-- für berechnungen immer index-1 benutzen !!!!!!!!!!!!!!!!!!!!!!!!!!!
 						when 1 =>       -- erst jetzt data vom index = 0 angekommen also bearbeitung für index 0
+						-- lese daten aus RAM -- FIXME als funktion
+							--px_colors_last := vector2rgb(ram_data);
+
+							px_colors_first := px_colors_last;
+
+							ram_addr  <= get_ram_addr_color(sensor_n, index); -- stelle naechstes adress
+							min_value := 0;
+							max_value := 0;
+							index     <= index + 1;
+							
+						when 2 =>       -- erst jetzt data vom index = 0 angekommen also bearbeitung für index 0
 						-- lese daten aus RAM -- FIXME als funktion
 							px_colors_last := vector2rgb(ram_data);
 
@@ -97,29 +108,38 @@ begin
 							max_value := 0;
 							index     <= index + 1;
 
-						when 32 =>
+						when 33 =>
 							-- lese daten aus RAM
 							px_colors := vector2rgb(ram_data);
 
+							ram_addr  <= get_ram_addr_color(sensor_n, index);
+							
 							values_1 := color_distance(px_colors, px_colors_first);
 
 							if values_1 > max_value then
 								max_value := values_1;
-								max_pos   := index - 1;
+								max_pos   := index - 2;
 							end if;
 
 							if values_1 < min_value then
 								min_value := values_1;
-								min_pos   := index - 1;
+								min_pos   := index - 2;
 							end if;
 
 							move_vector_x      <= max_value; -- TODO ausgabe realisieren
 							move_vector_y      <= min_value;
-							sensor_data_ready  <= '1';
-							sensor_out.pos.x   <= 20 * sensor_n; -- FIXME koordinaten speichern
-							sensor_out.pos.y   <= 50;
 							sensor_out.min_pos <= min_pos;
 							sensor_out.max_pos <= max_pos;
+
+							index     <= index + 1;
+						
+						when 34 =>
+
+							sensor_data_ready  <= '1';
+							
+							sensor_out.pos.x   <= to_integer(unsigned(ram_data(23 downto 12)));
+							sensor_out.pos.y   <= to_integer(unsigned(ram_data(11 downto 0)));
+
 							sensor_calculated  <= '1';
 							index              <= 0;
 							sensor_n           <= sensor_n + 1; -- FIXME wenn mehr als 5 stop
@@ -134,12 +154,12 @@ begin
 
 							if values_1 > max_value then
 								max_value := values_1;
-								max_pos   := index - 1; -- !! RAM verzoegerung
+								max_pos   := index - 2; -- !! RAM verzoegerung
 							end if;
 
 							if values_1 < min_value then
 								min_value := values_1;
-								min_pos   := index - 1; -- !! RAM verzoegerung
+								min_pos   := index - 2; -- !! RAM verzoegerung
 							end if;
 
 							ram_addr       <= get_ram_addr_color(sensor_n, index); -- stelle naechstes adress

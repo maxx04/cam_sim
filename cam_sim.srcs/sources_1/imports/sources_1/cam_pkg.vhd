@@ -103,7 +103,7 @@ package body CAM_PKG is
 	end function color_distance;
 	
 	function get_ram_addr_color(sensor_nr : in integer; index : in integer) return std_logic_vector is
-		constant sensor_mem_length : integer := 32;
+		constant sensor_mem_length : integer := 33; -- 32 + 1 -- FIXME versuchen automatisieren
 		variable r : std_logic_vector(11 downto 0);
 	begin
 		r := std_logic_vector(to_unsigned((sensor_nr  * sensor_mem_length + index),12));

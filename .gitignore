@@ -27,6 +27,7 @@ cam_sim.sim/**/behav/**/*.*
 #.xci + .dcp: implementation possible but not re-synthesis
 #*.xci(www.spiritconsortium.org)
 !*.xci
+!*.xcix
 #*.dcp(checkpoint files)
 !*.dcp
 !*.vds
