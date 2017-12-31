@@ -170,7 +170,7 @@ begin
 		sensor_inst : component check_sensor
 			generic map(
 				sensor_number   => n,
-				sensor_position => (n * 20 + 100 , 250)
+				sensor_position => (n * 20  , 50)
 			)
 			port map(
 				resetn            => resetn,
@@ -257,7 +257,7 @@ begin
 			if resetn = '0' then
 				outbus_free <= '0';
 			else
-				outbus_free <= '1'; --not or_reduct(tmp_sensor_data_ready);
+				outbus_free <= '1'; --not or_reduct(tmp_sensor_data_ready); -- FIXME
 			end if;
 		end if;
 	end process check_bus;

@@ -12,15 +12,19 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="41476253500000fs"></ZoomStartTime>
-      <ZoomEndTime time="41476477300001fs"></ZoomEndTime>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="188873638fs"></ZoomEndTime>
       <Cursor1Time time="41476440000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="241"></NameColumnWidth>
-      <ValueColumnWidth column_width="181"></ValueColumnWidth>
+      <ValueColumnWidth column_width="177"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="15" />
+   <WVObjectSize size="18" />
+   <wvobject fp_name="/s_top/modul/\generate_sensors_x(1)\/sensor_inst/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
    <wvobject fp_name="/s_top/modul/\generate_sensors_x(1)\/sensor_inst/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -73,6 +77,10 @@
       <obj_property name="ElementShortName">new_value</obj_property>
       <obj_property name="ObjectShortName">new_value</obj_property>
    </wvobject>
+   <wvobject fp_name="/s_top/modul/\generate_sensors_x(1)\/sensor_inst/index" type="other">
+      <obj_property name="ElementShortName">index</obj_property>
+      <obj_property name="ObjectShortName">index</obj_property>
+   </wvobject>
    <wvobject fp_name="/s_top/modul/\generate_sensors_x(1)\/sensor_inst/sensor_number" type="other">
       <obj_property name="ElementShortName">sensor_number</obj_property>
       <obj_property name="ObjectShortName">sensor_number</obj_property>
@@ -80,5 +88,9 @@
    <wvobject fp_name="/s_top/modul/\generate_sensors_x(1)\/sensor_inst/sensor_position" type="array">
       <obj_property name="ElementShortName">sensor_position</obj_property>
       <obj_property name="ObjectShortName">sensor_position</obj_property>
+   </wvobject>
+   <wvobject fp_name="/s_top/modul/\generate_sensors_x(1)\/sensor_inst/sensor_radius" type="other">
+      <obj_property name="ElementShortName">sensor_radius</obj_property>
+      <obj_property name="ObjectShortName">sensor_radius</obj_property>
    </wvobject>
 </wave_config>

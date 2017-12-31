@@ -53,9 +53,6 @@ begin
 		variable tmp_sensor_vec : sensor_vector;
 		variable tmp_sensor     : sensor;
 		variable px_data_tmp    : std_logic_vector(23 downto 0);
-		variable xn, yn         : integer;
-		variable  sighn1 : integer := -1;
-		variable  sighn2 : integer := -1;
 
 	begin
 		wait until falling_edge(clk);
@@ -72,20 +69,11 @@ begin
 
 				DrawCross(tmp_sensor.pos.x, tmp_sensor.pos.y, px_data_tmp);
 
-				for n in 0 to 31 loop
+				for n in 0 to points_per_circle - 1 loop
+					
+					SetPixelV(tmp_sensor.pos.x + get_circle_shift_x(n), 
+									tmp_sensor.pos.y + get_circle_shift_y(n), px_data_tmp);
 
-					if n > 15 then
-						sighn1 := -sighn1;
-					end if;
-
-					if n > 7 or n > 23 then
-						sighn2 := -sighn2;
-					end if;
-
-					xn := tmp_sensor.pos.x - sighn1*get_circle_shift(n/2);
-					yn := tmp_sensor.pos.y + sighn2*get_circle_shift(n/2);
-
-					SetPixelV(xn, yn, px_data_tmp);
 
 				end loop;
 

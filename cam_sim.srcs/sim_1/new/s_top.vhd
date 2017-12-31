@@ -37,7 +37,6 @@ use xil_defaultlib.CAM_PKG.all;
 entity s_top is
 end s_top;
 
-
 architecture Behavioral of s_top is
 
 	signal reset                                : std_logic := '1';
@@ -132,6 +131,6 @@ begin
 
 	clk <= not clk after 10 ns;
 
-	reset <= '0', '1' after 20 ns;
+	reset <= '0', '1' after 100 ns;
 
 end Behavioral;

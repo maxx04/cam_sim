@@ -31,6 +31,10 @@ package CAM_PKG is
 	constant bytes_per_px : positive := 3;
 	constant pclk_to_clk_rate   : integer  := 2;
 	constant sensors_number     : integer := 6;
+	constant sensor_radius : integer := 8;
+	constant points_per_circle : integer := 40;
+	constant sensor_mem_length : integer := points_per_circle + 1; -- koordinaten x,y; 
+	constant ram_color_width : integer := 12;
 
 	subtype int8u is integer range 0 to 255;
 
@@ -61,7 +65,7 @@ package CAM_PKG is
 
 	type positions_array is array (31 downto 0) of pixel_position;
 	type color_array is array (31 downto 0) of RGB_COLOR;
-	type shift_position is array (16 downto 0) of integer range 0 to 8; --- FIXME größe 3 bit
+	type shift_position is array (0 to points_per_circle /2 -1 ) of integer range -sensor_radius to sensor_radius; 
 
 	function log2(n : natural) return natural;
 	function middle_value(v1 : in RGB_COLOR; v2 : in RGB_COLOR) return RGB_COLOR;
@@ -71,7 +75,8 @@ package CAM_PKG is
 	function get_ram_addr_color(sensor_nr : in integer; index : in integer) return std_logic_vector;
 	function or_reduct(slv : in std_logic_vector) return std_logic;
 	function vector2rgb(pixel_vector : std_logic_vector(23 downto 0)) return RGB_COLOR;
-	function get_circle_shift( index : integer) return integer;
+	function get_circle_shift_x( index : integer range 0 to points_per_circle - 1) return integer;
+	function get_circle_shift_y( index : integer range 0 to points_per_circle - 1) return integer;
 
 end package CAM_PKG;
 
@@ -103,10 +108,9 @@ package body CAM_PKG is
 	end function color_distance;
 	
 	function get_ram_addr_color(sensor_nr : in integer; index : in integer) return std_logic_vector is
-		constant sensor_mem_length : integer := 33; -- 32 + 1 -- FIXME versuchen automatisieren
-		variable r : std_logic_vector(11 downto 0);
+		variable r : std_logic_vector(ram_color_width-1 downto 0);
 	begin
-		r := std_logic_vector(to_unsigned((sensor_nr  * sensor_mem_length + index),12));
+		r := std_logic_vector(to_unsigned((sensor_nr  * sensor_mem_length + index),ram_color_width));
 		return r;
 		
 	end function get_ram_addr_color;
@@ -146,11 +150,28 @@ package body CAM_PKG is
 		return rgb;
 	end;
 	
-	function get_circle_shift( index : integer) return integer is
-		variable shifts        : shift_position   := (0, 2, 4, 5, 6, 7, 8, 8, 8, 8, 8, 7, 6, 5, 4, 2, 0); -- FIXME schiftmatrix corrigieren
+	-- Achtung nur fuer radius 8. -- TODO ausrechnen von der sensorgroesse (radius)
+	function get_circle_shift_x( index : integer range 0 to points_per_circle - 1) return integer is
+		constant shifts_x        : shift_position   := (0, 1, 2, 3, 4, 5, 6, 6, 7, 7, 7, 7, 7, 6, 6, 5, 4, 3, 2, 1); 
 	begin
-		return shifts(index);
+		if index  > points_per_circle / 2 - 1 then
+		return -shifts_x (index - points_per_circle / 2);
+	else
+		return shifts_x (index);
+		end if;
 	end;
+	
+	function get_circle_shift_y( index : integer range 0 to points_per_circle - 1) return integer is
+		constant shifts_y        : shift_position   := (7, 7, 7, 6, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6, -6, -7, -7);
+	begin
+	if index  > points_per_circle / 2 - 1 then
+		return -shifts_y (index - points_per_circle / 2);
+	else
+		return shifts_y (index);
+		end if;
+	end;
+	
+
 
  function or_reduct(slv : in std_logic_vector) return std_logic is
     variable res_v : std_logic;

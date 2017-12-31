@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="41476346750000fs"></ZoomStartTime>
-      <ZoomEndTime time="41476458650001fs"></ZoomEndTime>
-      <Cursor1Time time="41476440000000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="132891832fs"></ZoomEndTime>
+      <Cursor1Time time="0fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="241"></NameColumnWidth>
-      <ValueColumnWidth column_width="181"></ValueColumnWidth>
+      <ValueColumnWidth column_width="177"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="34" />
+   <WVObjectSize size="33" />
    <wave_markers>
       <marker time="1976920000000" label="" />
       <marker time="0" label="" />
@@ -71,10 +71,6 @@
    <wvobject fp_name="/s_top/modul/calc_move_inst/resetn" type="logic">
       <obj_property name="ElementShortName">resetn</obj_property>
       <obj_property name="ObjectShortName">resetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/s_top/modul/calc_move_inst/sensors_filled" type="logic">
-      <obj_property name="ElementShortName">sensors_filled</obj_property>
-      <obj_property name="ObjectShortName">sensors_filled</obj_property>
    </wvobject>
    <wvobject fp_name="/s_top/modul/calc_move_inst/ram_we" type="logic">
       <obj_property name="ElementShortName">ram_we</obj_property>

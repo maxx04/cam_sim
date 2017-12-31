@@ -10,7 +10,8 @@
 -- Tool Versions: 
 -- Description: 
 -- 
--- Dependencies: 
+-- Dependencies: Voraussetzung dass die sensoren in ene linie nicht gleichzeitig bearbeitet werden! Heben keine gemeinsame punkte.
+-- wenn notwendig soll zweite reihe draufgelegt werden. Kamerascan laeuft von unten nach oben, von links nach rechts.
 -- 
 -- Revision:
 -- Revision 0.01 - File Created
@@ -59,13 +60,14 @@ architecture Behavioral of check_sensor is
 
 	signal all_points_ready : std_logic := '0';
 	signal new_value        : std_logic := '0';
+	signal index            : integer range 0 to points_per_circle;
 
 begin
 
 	fill_points : process(clk) is
-		variable i             : integer range 0 to 4*sensor_radius - 1 := 0;
-		variable sighn         : integer range -1 to 1                  := -1;
-		variable index         : integer range 32 downto 0              := 0; -- 32 = to 31 + 1 position FIXME 
+		variable i     : integer range 0 to 4*sensor_radius - 1 := 0;
+		variable sighn : integer range -1 to 1                  := -1;
+
 		variable old_pixel_cnt : positive range 1 TO 1024;
 		--		variable p             : pixel;
 		--		variable p_sum         : RGB_COLOR;
@@ -77,7 +79,7 @@ begin
 				new_value         <= '0';
 				i                 := 0;
 				sighn             := 1;
-				index             := 0;
+				index             <= (points_per_circle / 2 - 1) + 2;
 				ram_we            <= 'Z';
 				ram_adress        <= (others => '0');
 				ram_data          <= (others => '0');
@@ -90,16 +92,16 @@ begin
 				ram_we           <= 'Z';
 				ram_adress       <= (others => 'Z'); -- FIXME auf collision prüfen
 				ram_data         <= (others => 'Z');
-				
-				
-				if(all_points_ready = '1') then -- all points ist noch 1 nach dem index = 16
-								ram_we     <= '1';
-								ram_adress <= get_ram_addr_color(sensor_number, 32);
-								ram_data (23 downto 12)   <= std_logic_vector(to_unsigned(sensor_position.x, 12));
-								ram_data (11 downto 0)   <= std_logic_vector(to_unsigned(sensor_position.y, 12));
-								
-								index             := 0;
-								sensor_data_ready <= '1';
+
+				if (all_points_ready = '1') then -- all points ist noch 1 nach dem index = points_per_circle / 2
+					ram_we                 <= '1';
+					ram_adress             <= get_ram_addr_color(sensor_number, (points_per_circle - 1) + 1);
+					ram_data(23 downto 12) <= std_logic_vector(to_unsigned(sensor_position.x, 12));
+					ram_data(11 downto 0)  <= std_logic_vector(to_unsigned(sensor_position.y, 12));
+
+					index             <= (points_per_circle / 2 - 1) + 2; -- fuer naechste runde;
+					sensor_data_ready <= '1';
+
 				end if;
 
 				if (pixel_data_ready = '1' and pixel_cnt /= old_pixel_cnt) then -- FIXME schlechtes stil, ressource
@@ -109,15 +111,8 @@ begin
 					-- wenn innerhalb sensor
 					if (line_cnt >= sensor_position.y - sensor_radius and line_cnt <= sensor_position.y + sensor_radius) then
 
-						-- wenn oberes punkt erreicht ist
-						if (line_cnt = sensor_position.y - sensor_radius and pixel_cnt = sensor_position.x - 1) then
-							sighn := 1;
-							index := 0;
-							i     := 0;
-						end if;
-
-						-- und pixelreihenfolge von links nach rechts
-						if (pixel_cnt = sensor_position.x - 1 + sighn*get_circle_shift(i)) then --FIXME Vereinheitlichen Pixel faengt von 1 und nicht von 0
+						-- und pixelreihenfolge von links nach rechts !!!
+						if (pixel_cnt = sensor_position.x - 1 + get_circle_shift_x(index)) then --FIXME Vereinheitlichen Pixel faengt von 1 und nicht von 0
 							-- index wird von oben nach unten berechnet
 
 							new_value <= '1';
@@ -134,21 +129,57 @@ begin
 							--	p_sum := middle_value(color_tmp, p_sum);
 							--- End Prozedur	
 
-							-- am Ende wenn alle Sensorpunkte durch sind	
-							if index = 16 then
-								i                := 0;
-								index            := 32;
-								all_points_ready <= '1';
-							end if;
-
-							if sighn = 1 then -- erstes sighn = -1
-								index := 31 - i;
+							if sighn = 1 then
+								index <= points_per_circle / 2 - 1 + i;
 								i     := i + 1; -- fuer naechste runde
 							else
-								index := i;
+								index <= points_per_circle / 2 - 1 - i;
 							end if;
 
 							sighn := -sighn; -- richtung wechsel
+
+							-- wenn oberes punkt erreicht ist
+							if (line_cnt = sensor_position.y + sensor_radius) then
+								i := 0;
+								case pixel_cnt is -- immer naechste vorgabe für index
+									when sensor_position.x - 2 =>
+										index <= points_per_circle - 1 - 1; 
+									when sensor_position.x - 1 =>
+										index <= 0;
+									when sensor_position.x =>
+										index <= 1;
+									when sensor_position.x + 1 => -- letztes punkt
+										index <= 2;
+									when sensor_position.x + 2 =>    -- sensor gefuellt
+										index <= points_per_circle - 2 - 1;
+										all_points_ready <= '1';
+										sighn := -1;
+										i     := 0;
+									when others => null;
+								end case;
+
+							end if;
+
+							-- wenn unteres punkt erreicht ist
+							if (line_cnt = sensor_position.y - sensor_radius) then
+								i := 0;
+								case pixel_cnt is -- immer naechste vorgabe für index -- FIXME reihenfolge anders von links nach rechts
+									when sensor_position.x - 2 =>
+										index <= points_per_circle / 2 - 1 + 1;
+									when sensor_position.x - 1 =>
+										index <= points_per_circle / 2 - 1;
+									when sensor_position.x =>
+										index <= points_per_circle / 2 - 1 - 1;
+									when sensor_position.x + 1 =>
+										index <= points_per_circle / 2 - 1 - 2;
+									when sensor_position.x + 2 =>
+										index <= points_per_circle / 2 - 1 + 3; -- naechstes punkt
+										sighn := -1;
+										i     := 3;
+									when others => null;
+								end case;
+
+							end if;
 
 						end if;
 

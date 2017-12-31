@@ -50,7 +50,7 @@ architecture Behavioral of sensor_calc_move is
 
 	signal sensor_calculated : std_logic;
 	signal sensor_n          : integer range 1 to sensors_number;
-	signal index             : integer range 0 to 34:= 0;
+	signal index             : integer range 0 to points_per_circle + 2:= 0;
 
 	signal move_vector_x : integer range -255 to 255;
 	signal move_vector_y : integer range -255 to 255;
@@ -81,12 +81,14 @@ begin
 
 					--FIXME optimierung moeglich
 					case index is
+						
 					when 0 =>
 						-- stelle adress, daten kommen in 2 takten spaeter
 							ram_addr <= get_ram_addr_color(sensor_n, index); 
 							-- auch enable 
 							index <= index + 1;
 						-- für berechnungen immer index-2 benutzen !!!!!!!!!!!!!!!!!!!!!!!!!!!
+						
 						when 1 =>       
 							ram_addr  <= get_ram_addr_color(sensor_n, index); -- stelle naechstes adress
 							index     <= index + 1;
@@ -102,7 +104,7 @@ begin
 							max_value := 0;
 							index     <= index + 1;
 
-						when 33 =>
+						when points_per_circle + 1 =>
 							-- lese daten aus RAM
 							px_colors := vector2rgb(ram_data);
 
@@ -127,7 +129,7 @@ begin
 
 							index     <= index + 1;
 						
-						when 34 =>
+						when points_per_circle + 2 =>
 
 							sensor_data_ready  <= '1';
 							
