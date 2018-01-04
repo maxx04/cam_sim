@@ -65,8 +65,8 @@ begin
 			else
 				-- VSYNC
 				if (vsync = '1') then
-					px_count   := 0;
-					line_count := 0;
+					px_count   := 1; -- faengt von 1 an !!!
+					line_count := 1;
 				end if;
 
 				px_data_ready <= '0';

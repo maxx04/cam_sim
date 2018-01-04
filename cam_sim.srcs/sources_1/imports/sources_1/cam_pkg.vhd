@@ -151,10 +151,11 @@ package body CAM_PKG is
 	end;
 	
 	-- Achtung nur fuer radius 8. -- TODO ausrechnen von der sensorgroesse (radius)
+	-- index faengt mit 0 an
 	function get_circle_shift_x( index : integer range 0 to points_per_circle - 1) return integer is
 		constant shifts_x        : shift_position   := (0, 1, 2, 3, 4, 5, 6, 6, 7, 7, 7, 7, 7, 6, 6, 5, 4, 3, 2, 1); 
 	begin
-		if index  > points_per_circle / 2 - 1 then
+		if index  > points_per_circle / 2 - 1  then
 		return -shifts_x (index - points_per_circle / 2);
 	else
 		return shifts_x (index);

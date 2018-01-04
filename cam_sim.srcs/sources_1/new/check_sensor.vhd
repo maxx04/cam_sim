@@ -79,7 +79,7 @@ begin
 				new_value         <= '0';
 				i                 := 0;
 				sighn             := 1;
-				index             <= (points_per_circle / 2 - 1) + 2;
+				index             <= (points_per_circle / 2 - 1) + 3;
 				ram_we            <= 'Z';
 				ram_adress        <= (others => '0');
 				ram_data          <= (others => '0');
@@ -99,7 +99,7 @@ begin
 					ram_data(23 downto 12) <= std_logic_vector(to_unsigned(sensor_position.x, 12));
 					ram_data(11 downto 0)  <= std_logic_vector(to_unsigned(sensor_position.y, 12));
 
-					index             <= (points_per_circle / 2 - 1) + 2; -- fuer naechste runde;
+					index             <= (points_per_circle / 2 - 1) + 3; -- fuer naechste runde;
 					sensor_data_ready <= '1';
 
 				end if;
@@ -112,7 +112,7 @@ begin
 					if (line_cnt >= sensor_position.y - sensor_radius and line_cnt <= sensor_position.y + sensor_radius) then
 
 						-- und pixelreihenfolge von links nach rechts !!!
-						if (pixel_cnt = sensor_position.x - 1 + get_circle_shift_x(index)) then --FIXME Vereinheitlichen Pixel faengt von 1 und nicht von 0
+						if (pixel_cnt = sensor_position.x + get_circle_shift_x(index)) then 
 							-- index wird von oben nach unten berechnet
 
 							new_value <= '1';
@@ -130,10 +130,11 @@ begin
 							--- End Prozedur	
 
 							if sighn = 1 then
-								index <= points_per_circle / 2 - 1 + i;
-								i     := i + 1; -- fuer naechste runde
+								index <= points_per_circle / 2 + i;
+
 							else
-								index <= points_per_circle / 2 - 1 - i;
+								index <= points_per_circle / 2 - i;
+								i     := i + 1; -- fuer naechste runde
 							end if;
 
 							sighn := -sighn; -- richtung wechsel
@@ -143,7 +144,7 @@ begin
 								i := 0;
 								case pixel_cnt is -- immer naechste vorgabe für index
 									when sensor_position.x - 2 =>
-										index <= points_per_circle - 1 - 1; 
+										index <= points_per_circle - 1; 
 									when sensor_position.x - 1 =>
 										index <= 0;
 									when sensor_position.x =>
@@ -165,15 +166,15 @@ begin
 								i := 0;
 								case pixel_cnt is -- immer naechste vorgabe für index -- FIXME reihenfolge anders von links nach rechts
 									when sensor_position.x - 2 =>
-										index <= points_per_circle / 2 - 1 + 1;
+										index <= points_per_circle / 2 - 1 + 2;
 									when sensor_position.x - 1 =>
-										index <= points_per_circle / 2 - 1;
+										index <= points_per_circle / 2 - 1 + 1;
 									when sensor_position.x =>
-										index <= points_per_circle / 2 - 1 - 1;
+										index <= points_per_circle / 2 - 1;
 									when sensor_position.x + 1 =>
-										index <= points_per_circle / 2 - 1 - 2;
+										index <= points_per_circle / 2 - 1 - 1;
 									when sensor_position.x + 2 =>
-										index <= points_per_circle / 2 - 1 + 3; -- naechstes punkt
+										index <= points_per_circle / 2 - 1 + 4; -- naechstes punkt
 										sighn := -1;
 										i     := 3;
 									when others => null;
