@@ -58,27 +58,7 @@ begin
 		wait until falling_edge(clk);
 
 		if resetn = '1' then
-
-			if (sensor_data_ready = '1') then -- sensor abbilden
-
-				tmp_sensor := vector2sensor(sensor_data);
-
-				px_data_tmp(7 downto 0)   := (others => '1');
-				px_data_tmp(15 downto 8)  := (others => '0');
-				px_data_tmp(23 downto 16) := (others => '0');
-
-				DrawCross(tmp_sensor.pos.x, tmp_sensor.pos.y, px_data_tmp);
-
-				for n in 0 to points_per_circle - 1 loop
-					
-					SetPixelV(tmp_sensor.pos.x + get_circle_shift_x(n), 
-									tmp_sensor.pos.y + get_circle_shift_y(n), px_data_tmp);
-
-
-				end loop;
-
-			end if;
-
+			
 			if (x /= x_old) then
 				x_old <= x;
 
@@ -103,6 +83,39 @@ begin
 
 				end if;
 			end if;
+			
+
+			if (sensor_data_ready = '1') then -- sensor abbilden
+
+				tmp_sensor := vector2sensor(sensor_data);
+
+				px_data_tmp := X"FF0000";
+
+				SetPixelV(tmp_sensor.pos.x + get_circle_shift_x(tmp_sensor.max_pos),
+				          tmp_sensor.pos.y + get_circle_shift_y(tmp_sensor.max_pos), px_data_tmp);
+
+				--DrawCross(tmp_sensor.pos.x, tmp_sensor.pos.y, px_data_tmp);
+
+				for n in 0 to points_per_circle - 1 loop
+
+					SetPixelV(tmp_sensor.pos.x + get_circle_shift_x(n),
+					          tmp_sensor.pos.y + get_circle_shift_y(n), px_data_tmp);
+
+				end loop;
+
+				px_data_tmp := X"0000FF";
+
+				SetPixelV(tmp_sensor.pos.x + get_circle_shift_x(tmp_sensor.max_pos),
+				          tmp_sensor.pos.y + get_circle_shift_y(tmp_sensor.max_pos), px_data_tmp);
+				          
+				px_data_tmp := X"00FF00";
+
+				SetPixelV(tmp_sensor.pos.x + get_circle_shift_x(tmp_sensor.min_pos),
+				          tmp_sensor.pos.y + get_circle_shift_y(tmp_sensor.min_pos), px_data_tmp);
+
+			end if;
+
+
 
 		end if;
 

@@ -170,7 +170,7 @@ begin
 		sensor_inst : component check_sensor
 			generic map(
 				sensor_number   => n,
-				sensor_position => (n * 20  , 50)
+				sensor_position => (n * 20 +200 , 300)
 			)
 			port map(
 				resetn            => resetn,

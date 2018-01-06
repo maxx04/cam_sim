@@ -117,7 +117,7 @@ begin
 
 							new_value <= '1';
 
-							if ram_ready = '1' then -- FIXME not activated
+							if ram_ready = '1' then 
 								ram_we     <= '1';
 								ram_adress <= get_ram_addr_color(sensor_number, index);
 								ram_data   <= pixel_data;
